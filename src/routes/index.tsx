@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowUpRight, Instagram, Linkedin, Mail } from "lucide-react";
+import { ArrowUpRight, Download, Linkedin } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 import portrait from "@/assets/profile-portrait.jpg";
@@ -40,7 +40,6 @@ const PORTFOLIO_DATA = {
       image: vesperImage,
       number: "01",
       href: "https://www.behance.net/",
-      layout: "large",
     },
     {
       title: "Flora Rituals",
@@ -49,7 +48,6 @@ const PORTFOLIO_DATA = {
       image: floraImage,
       number: "02",
       href: "https://www.behance.net/",
-      layout: "tall",
     },
     {
       title: "Aura Gallery",
@@ -58,7 +56,6 @@ const PORTFOLIO_DATA = {
       image: auraImage,
       number: "03",
       href: "https://www.behance.net/",
-      layout: "tall",
     },
     {
       title: "Modul Jazz",
@@ -67,7 +64,6 @@ const PORTFOLIO_DATA = {
       image: modulImage,
       number: "04",
       href: "https://www.behance.net/",
-      layout: "wide",
     },
   ],
   experience: [
@@ -113,7 +109,7 @@ function Portfolio() {
           <p className="mt-1 text-sm text-muted">{PORTFOLIO_DATA.role}</p>
         </div>
 
-        <nav className="mt-8 flex gap-5 overflow-x-auto pb-1 text-sm md:mt-12 md:block md:space-y-3 md:overflow-visible" aria-label="Primary navigation" data-reveal>
+        <nav className="mt-8 grid grid-cols-2 gap-x-5 gap-y-3 text-[13px] md:mt-12 md:block md:space-y-3" aria-label="Primary navigation" data-reveal>
           <span className="hidden text-[10px] font-semibold uppercase tracking-[0.2em] text-muted md:block md:mb-5">Index</span>
           <a href="#works" className="shrink-0 transition-colors hover:text-vermillion">Selected works</a>
           <a href="#information" className="shrink-0 transition-colors hover:text-vermillion">Information</a>
@@ -132,46 +128,45 @@ function Portfolio() {
           </div>
         </div>
 
-        <a href={`mailto:${PORTFOLIO_DATA.email}`} className="mt-7 flex items-center justify-between rounded-md bg-ink px-3 py-2.5 text-sm text-paper transition-transform hover:-translate-y-0.5 md:mt-8" data-reveal>
+        <a href={`mailto:${PORTFOLIO_DATA.email}`} className="mt-7 flex items-center justify-between rounded-md bg-ink px-3 py-2.5 text-[13px] text-paper transition-transform hover:-translate-y-0.5 md:mt-8" data-reveal>
           <span className="flex items-center gap-2"><span className="size-1.5 rounded-full bg-vermillion" /> Inquire</span>
           <ArrowUpRight size={15} strokeWidth={1.5} />
         </a>
 
-        <div className="mt-4 flex gap-4 text-muted" data-reveal>
+        <div className="mt-4 flex items-center gap-4 text-muted" data-reveal>
           <a href={PORTFOLIO_DATA.behance} target="_blank" rel="noreferrer" aria-label="Behance" className="transition-colors hover:text-vermillion">Be</a>
-          <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" aria-label="Instagram" className="transition-colors hover:text-vermillion"><Instagram size={14} strokeWidth={1.5} /></a>
           <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="transition-colors hover:text-vermillion"><Linkedin size={14} strokeWidth={1.5} /></a>
-          <a href={`mailto:${PORTFOLIO_DATA.email}`} aria-label="Email" className="transition-colors hover:text-vermillion"><Mail size={14} strokeWidth={1.5} /></a>
+          <a href="/julian-thorne-cv.pdf" download className="ml-auto flex items-center gap-1.5 text-[11px] transition-colors hover:text-vermillion" aria-label="Download CV"><Download size={13} strokeWidth={1.5} /> CV</a>
         </div>
       </aside>
 
       <main className="md:ml-72">
-        <section className="border-b border-line px-5 pb-20 pt-20 md:px-16 md:pb-24 md:pt-32" data-reveal>
+        <section className="border-b border-line px-5 pb-16 pt-16 md:px-12 md:pb-20 md:pt-24 lg:px-16 lg:pt-28" data-reveal>
           <div className="max-w-[56ch]">
             <p className="mb-6 font-mono text-[10px] uppercase tracking-[0.2em] text-vermillion">Visual communication / 2024</p>
-            <h2 className="font-serif text-5xl italic leading-[0.95] md:text-7xl">{PORTFOLIO_DATA.intro}</h2>
-            <p className="mt-10 max-w-[46ch] text-lg leading-relaxed text-muted">{PORTFOLIO_DATA.bio}</p>
+            <h2 className="font-serif text-4xl italic leading-[1.02] sm:text-5xl lg:text-6xl">{PORTFOLIO_DATA.intro}</h2>
+            <p className="mt-8 max-w-[46ch] text-base leading-relaxed text-muted">{PORTFOLIO_DATA.bio}</p>
           </div>
         </section>
 
-        <section id="works" className="scroll-mt-8 px-5 py-20 md:px-16 md:py-24">
+        <section id="works" className="scroll-mt-8 px-5 py-16 md:px-12 md:py-20 lg:px-16 lg:py-24">
           <div className="mb-14 flex items-end justify-between gap-6" data-reveal>
             <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">Selected projects / 2022–2024</h3>
             <span className="hidden font-mono text-[10px] text-muted sm:block">Collected works vol. II</span>
           </div>
 
-          <div className="grid grid-cols-1 gap-x-12 gap-y-20 md:grid-cols-12 md:gap-y-32">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-14 md:grid-cols-2 lg:gap-x-8 xl:grid-cols-3">
             {PORTFOLIO_DATA.projects.map((project, index) => (
-              <article key={project.number} className={`${project.layout === "large" ? "md:col-span-8" : project.layout === "tall" ? "md:col-span-4" : "md:col-span-7 md:-mt-20"} group`} data-reveal>
+              <article key={project.number} className="group min-w-0" data-reveal>
                 <a href={project.href} target="_blank" rel="noreferrer" className="block" aria-label={`View ${project.title} on Behance`}>
                   <div className="mb-6 overflow-hidden rounded-md bg-surface" data-line>
-                    <img src={project.image} alt={`${project.title} project artwork`} width={project.layout === "large" ? 1200 : project.layout === "wide" ? 1000 : 800} height={project.layout === "large" ? 800 : project.layout === "wide" ? 600 : 1000} loading="lazy" className={`w-full object-cover transition duration-700 ease-out group-hover:scale-[1.025] ${project.layout === "large" ? "aspect-[3/2]" : project.layout === "wide" ? "aspect-[16/10]" : "aspect-[4/5]"}`} />
+                    <img src={project.image} alt={`${project.title} project artwork`} width={900} height={1080} loading="lazy" className="aspect-[5/6] w-full object-cover transition duration-700 ease-out group-hover:scale-[1.025]" />
                   </div>
                 </a>
                 <div className="flex items-start justify-between gap-5">
                   <div className="max-w-[40ch]">
-                    <h4 className="font-serif text-2xl italic">{project.title}</h4>
-                    <p className="mt-2 text-sm leading-relaxed text-muted">{project.description}</p>
+                    <h4 className="font-serif text-xl italic">{project.title}</h4>
+                    <p className="mt-2 text-[13px] leading-relaxed text-muted">{project.description}</p>
                     <p className="mt-3 font-mono text-[10px] uppercase tracking-wider text-muted">{project.category}</p>
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-2">
@@ -184,13 +179,13 @@ function Portfolio() {
           </div>
         </section>
 
-        <section id="information" className="scroll-mt-8 border-t border-line px-5 py-20 md:px-16 md:py-32" data-reveal>
+        <section id="information" className="scroll-mt-8 border-t border-line px-5 py-16 md:px-12 md:py-24 lg:px-16" data-reveal>
           <div className="grid gap-14 md:grid-cols-12 md:gap-8">
             <div className="md:col-span-4">
               <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">Information</h3>
             </div>
             <div className="md:col-span-8">
-              <p className="max-w-[48ch] font-serif text-3xl italic leading-tight">Design is the quiet structure that lets a good idea stay clear.</p>
+              <p className="max-w-[48ch] font-serif text-2xl italic leading-tight md:text-[28px]">Design is the quiet structure that lets a good idea stay clear.</p>
               <div data-line className="mt-12 h-px w-full bg-line" />
               <div className="mt-12 grid gap-10 sm:grid-cols-2">
                 <ExpertiseGroup title="Direction" items={PORTFOLIO_DATA.expertise.direction} />
@@ -200,7 +195,7 @@ function Portfolio() {
           </div>
         </section>
 
-        <section id="experience" className="scroll-mt-8 border-t border-line px-5 py-20 md:px-16 md:py-32" data-reveal>
+        <section id="experience" className="scroll-mt-8 border-t border-line px-5 py-16 md:px-12 md:py-24 lg:px-16" data-reveal>
           <div className="grid gap-14 md:grid-cols-12 md:gap-8">
             <div className="md:col-span-4">
               <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">Selected experience</h3>
@@ -224,9 +219,9 @@ function Portfolio() {
           </div>
         </section>
 
-        <footer id="contact" className="scroll-mt-8 flex flex-col gap-8 border-t border-line px-5 py-10 text-[10px] uppercase tracking-widest text-muted sm:flex-row sm:items-center sm:justify-between md:px-16" data-reveal>
+        <footer id="contact" className="scroll-mt-8 flex flex-col gap-8 border-t border-line px-5 py-10 text-[10px] uppercase tracking-widest text-muted sm:flex-row sm:items-center sm:justify-between md:px-12 lg:px-16" data-reveal>
           <div className="flex flex-wrap gap-x-8 gap-y-2"><span>© 2024 {PORTFOLIO_DATA.name}</span><span>Available globally</span></div>
-          <div className="flex gap-7 font-medium"><a href={PORTFOLIO_DATA.behance} target="_blank" rel="noreferrer" className="transition-colors hover:text-vermillion">Behance</a><a href="https://www.instagram.com/" target="_blank" rel="noreferrer" className="transition-colors hover:text-vermillion">Instagram</a><a href={`mailto:${PORTFOLIO_DATA.email}`} className="transition-colors hover:text-vermillion">Email</a></div>
+          <div className="flex gap-7 font-medium"><a href={PORTFOLIO_DATA.behance} target="_blank" rel="noreferrer" className="transition-colors hover:text-vermillion">Behance</a><a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" className="transition-colors hover:text-vermillion">LinkedIn</a><a href="/julian-thorne-cv.pdf" download className="transition-colors hover:text-vermillion">Download CV</a></div>
         </footer>
       </main>
     </div>
