@@ -111,10 +111,10 @@ function Portfolio() {
 
         <nav className="mt-8 grid grid-cols-2 gap-x-5 gap-y-3 text-[13px] md:mt-12 md:block md:space-y-3" aria-label="Primary navigation" data-reveal>
           <span className="hidden text-[10px] font-semibold uppercase tracking-[0.2em] text-muted md:block md:mb-5">Index</span>
-          <a href="#works" className="shrink-0 transition-colors hover:text-vermillion">Selected works</a>
-          <a href="#information" className="shrink-0 transition-colors hover:text-vermillion">Information</a>
-          <a href="#experience" className="shrink-0 transition-colors hover:text-vermillion">Experience</a>
-          <a href="#contact" className="shrink-0 transition-colors hover:text-vermillion">Contact</a>
+          <a href="#works" className="block transition-colors hover:text-vermillion">Selected works</a>
+          <a href="#information" className="block transition-colors hover:text-vermillion">Information</a>
+          <a href="#experience" className="block transition-colors hover:text-vermillion">Experience</a>
+          <a href="#contact" className="block transition-colors hover:text-vermillion">Contact</a>
         </nav>
 
         <div className="mt-8 grid grid-cols-2 gap-5 border-t border-line pt-5 text-xs md:mt-auto md:block md:space-y-6 md:border-t-0 md:pt-0" data-reveal>
