@@ -4,4 +4,4 @@
 - [x] Tone down typography and spacing
 - [x] Add a downloadable CV
 - [x] Keep only Behance and LinkedIn social links
-- [ ] Verify desktop, tablet, and phone layouts
+- [x] Verify desktop, tablet, and phone layouts
