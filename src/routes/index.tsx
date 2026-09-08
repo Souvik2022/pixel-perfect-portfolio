@@ -1,10 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowUpRight, Download, Linkedin, Sailboat, Sparkles } from "lucide-react";
+import { ArrowUpRight, Download, Linkedin } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { DiIllustrator, DiPhotoshop } from "react-icons/di";
-import { SiFigma, SiWondersharefilmora } from "react-icons/si";
-import { TbBrandAdobeXd, TbBrandOpenai } from "react-icons/tb";
 
+import canvaIcon from "@/assets/brand-icons/canva.svg.asset.json";
+import chatgptIcon from "@/assets/brand-icons/chatgpt.svg.asset.json";
+import dalleIcon from "@/assets/brand-icons/dalle.svg.asset.json";
+import figmaIcon from "@/assets/brand-icons/figma.svg.asset.json";
+import filmoraIcon from "@/assets/brand-icons/filmora.svg.asset.json";
+import illustratorIcon from "@/assets/brand-icons/illustrator.svg.asset.json";
+import midjourneyIcon from "@/assets/brand-icons/midjourney.svg.asset.json";
+import photoshopIcon from "@/assets/brand-icons/photoshop.svg.asset.json";
+import xdIcon from "@/assets/brand-icons/xd.svg.asset.json";
 import portrait from "@/assets/profile-portrait.jpg";
 import auraImage from "@/assets/project-aura.jpg";
 import floraImage from "@/assets/project-flora.jpg";
@@ -75,15 +81,15 @@ const PORTFOLIO_DATA = {
   ],
   expertise: {
     tools: [
-      { name: "Figma", detail: "UI design, prototyping, design systems", icon: SiFigma, color: "text-figma" },
-      { name: "Adobe Photoshop", detail: "Photo editing, compositing, digital art", icon: DiPhotoshop, color: "text-photoshop" },
-      { name: "Adobe Illustrator", detail: "Logo design, illustration, branding", icon: DiIllustrator, color: "text-illustrator" },
-      { name: "Adobe XD", detail: "UI/UX design, prototyping", icon: TbBrandAdobeXd, color: "text-xd" },
-      { name: "Canva", detail: "Social media, marketing creatives", mark: "C", color: "text-canva" },
-      { name: "Wondershare Filmora", detail: "Video editing, motion graphics", icon: SiWondersharefilmora, color: "text-filmora" },
-      { name: "ChatGPT", detail: "Ideation, content writing, research", icon: TbBrandOpenai, color: "text-chatgpt" },
-      { name: "Midjourney", detail: "AI image generation, concept visuals", icon: Sailboat, color: "text-ink" },
-      { name: "DALL·E", detail: "AI image generation, visual exploration", icon: Sparkles, color: "text-ink" },
+      { name: "Figma", detail: "UI design, prototyping, design systems", icon: figmaIcon.url },
+      { name: "Adobe Photoshop", detail: "Photo editing, compositing, digital art", icon: photoshopIcon.url },
+      { name: "Adobe Illustrator", detail: "Logo design, illustration, branding", icon: illustratorIcon.url },
+      { name: "Adobe XD", detail: "UI/UX design, prototyping", icon: xdIcon.url },
+      { name: "Canva", detail: "Social media, marketing creatives", icon: canvaIcon.url },
+      { name: "Wondershare Filmora", detail: "Video editing, motion graphics", icon: filmoraIcon.url },
+      { name: "ChatGPT", detail: "Ideation, content writing, research", icon: chatgptIcon.url },
+      { name: "Midjourney", detail: "AI image generation, concept visuals", icon: midjourneyIcon.url },
+      { name: "DALL·E", detail: "AI image generation, visual exploration", icon: dalleIcon.url },
     ],
     skills: [
       { name: "Graphic Design", detail: "Visual communication, layout, composition" },
@@ -214,11 +220,10 @@ function Portfolio() {
                   <p className="mb-6 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">Tools &amp; software</p>
                   <ul className="space-y-3.5">
                     {PORTFOLIO_DATA.expertise.tools.map((tool) => {
-                      const ToolIcon = tool.icon;
                       return (
                         <li key={tool.name} className="grid grid-cols-[24px_minmax(118px,0.7fr)_minmax(0,1.3fr)] items-center gap-3 text-[13px]">
-                          <span className={`flex size-6 items-center justify-center ${tool.color}`} aria-hidden="true">
-                            {ToolIcon ? <ToolIcon size={22} strokeWidth={1.7} /> : <span className="font-serif text-xl italic">{tool.mark}</span>}
+                          <span className="flex size-6 items-center justify-center" aria-hidden="true">
+                            <img src={tool.icon} alt="" width={24} height={24} loading="lazy" className="size-6 object-contain" />
                           </span>
                           <span className="font-medium text-ink">{tool.name}</span>
                           <span className="text-xs leading-relaxed text-muted">{tool.detail}</span>
