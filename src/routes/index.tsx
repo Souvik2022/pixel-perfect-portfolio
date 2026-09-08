@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowUpRight, Download, Linkedin } from "lucide-react";
+import { ArrowUpRight, Download, Linkedin, Sailboat, Sparkles } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { DiIllustrator, DiPhotoshop } from "react-icons/di";
+import { SiFigma, SiWondersharefilmora } from "react-icons/si";
+import { TbBrandAdobeXd, TbBrandOpenai } from "react-icons/tb";
 
 import portrait from "@/assets/profile-portrait.jpg";
 import auraImage from "@/assets/project-aura.jpg";
@@ -71,8 +74,29 @@ const PORTFOLIO_DATA = {
     { studio: "Kinetik, London", role: "Visual Designer", years: "2018 — 2021", detail: "Built digital-first identity systems and interaction design frameworks for emerging technology studios." },
   ],
   expertise: {
-    direction: ["Creative direction", "Identity systems", "Editorial strategy", "Type design"],
-    technical: ["Web architecture", "Motion systems", "Technical production", "Creative coding"],
+    tools: [
+      { name: "Figma", detail: "UI design, prototyping, design systems", icon: SiFigma, color: "text-figma" },
+      { name: "Adobe Photoshop", detail: "Photo editing, compositing, digital art", icon: DiPhotoshop, color: "text-photoshop" },
+      { name: "Adobe Illustrator", detail: "Logo design, illustration, branding", icon: DiIllustrator, color: "text-illustrator" },
+      { name: "Adobe XD", detail: "UI/UX design, prototyping", icon: TbBrandAdobeXd, color: "text-xd" },
+      { name: "Canva", detail: "Social media, marketing creatives", mark: "C", color: "text-canva" },
+      { name: "Wondershare Filmora", detail: "Video editing, motion graphics", icon: SiWondersharefilmora, color: "text-filmora" },
+      { name: "ChatGPT", detail: "Ideation, content writing, research", icon: TbBrandOpenai, color: "text-chatgpt" },
+      { name: "Midjourney", detail: "AI image generation, concept visuals", icon: Sailboat, color: "text-ink" },
+      { name: "DALL·E", detail: "AI image generation, visual exploration", icon: Sparkles, color: "text-ink" },
+    ],
+    skills: [
+      { name: "Graphic Design", detail: "Visual communication, layout, composition" },
+      { name: "UI Design", detail: "Interface design, components, visual systems" },
+      { name: "Social Media Design", detail: "Campaigns, carousels, promotional creatives" },
+      { name: "Branding", detail: "Logo design, brand identity, visual consistency" },
+      { name: "Website Design", detail: "Landing pages, marketing websites, UI visuals" },
+      { name: "Infographic Design", detail: "Data visualization, information design" },
+      { name: "Presentation Design", detail: "Pitch decks, business presentations" },
+      { name: "Video Editing", detail: "Motion graphics, promotional videos" },
+      { name: "AI-assisted Design", detail: "Concept generation, image creation, ideation" },
+      { name: "Problem Solving", detail: "Creative thinking, visual storytelling, iteration" },
+    ],
   },
 };
 
@@ -180,16 +204,40 @@ function Portfolio() {
         </section>
 
         <section id="information" className="scroll-mt-8 border-t border-line px-5 py-16 md:px-12 md:py-24 lg:px-16" data-reveal>
-          <div className="grid gap-14 md:grid-cols-12 md:gap-8">
-            <div className="md:col-span-4">
-              <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">Information</h3>
-            </div>
-            <div className="md:col-span-8">
-              <p className="max-w-[48ch] font-serif text-2xl italic leading-tight md:text-[28px]">Design is the quiet structure that lets a good idea stay clear.</p>
-              <div data-line className="mt-12 h-px w-full bg-line" />
-              <div className="mt-12 grid gap-10 sm:grid-cols-2">
-                <ExpertiseGroup title="Direction" items={PORTFOLIO_DATA.expertise.direction} />
-                <ExpertiseGroup title="Technical" items={PORTFOLIO_DATA.expertise.technical} />
+          <div className="grid gap-10 lg:grid-cols-[minmax(120px,0.42fr)_minmax(0,2.58fr)] lg:gap-14">
+            <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">Information</h3>
+            <div>
+              <p className="font-serif text-2xl italic leading-tight md:text-[28px]">Good ideas deserve the right tools, skills, and perspective.</p>
+              <div data-line className="mt-8 h-px w-full bg-line md:mt-10" />
+              <div className="mt-9 grid gap-12 xl:grid-cols-2 xl:gap-0">
+                <div className="xl:pr-12">
+                  <p className="mb-6 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">Tools &amp; software</p>
+                  <ul className="space-y-3.5">
+                    {PORTFOLIO_DATA.expertise.tools.map((tool) => {
+                      const ToolIcon = tool.icon;
+                      return (
+                        <li key={tool.name} className="grid grid-cols-[24px_minmax(118px,0.7fr)_minmax(0,1.3fr)] items-center gap-3 text-[13px]">
+                          <span className={`flex size-6 items-center justify-center ${tool.color}`} aria-hidden="true">
+                            {ToolIcon ? <ToolIcon size={22} strokeWidth={1.7} /> : <span className="font-serif text-xl italic">{tool.mark}</span>}
+                          </span>
+                          <span className="font-medium text-ink">{tool.name}</span>
+                          <span className="text-xs leading-relaxed text-muted">{tool.detail}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+                <div className="border-t border-line pt-9 xl:border-l xl:border-t-0 xl:pl-12 xl:pt-0">
+                  <p className="mb-6 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">Skills</p>
+                  <ul className="space-y-3.5">
+                    {PORTFOLIO_DATA.expertise.skills.map((skill) => (
+                      <li key={skill.name} className="grid grid-cols-[minmax(125px,0.8fr)_minmax(0,1.2fr)] gap-4 text-[13px]">
+                        <span className="font-medium text-ink">{skill.name}</span>
+                        <span className="text-xs leading-relaxed text-muted">{skill.detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -226,8 +274,4 @@ function Portfolio() {
       </main>
     </div>
   );
-}
-
-function ExpertiseGroup({ title, items }: { title: string; items: string[] }) {
-  return <div><p className="mb-4 font-mono text-[10px] uppercase tracking-wider text-muted">{title}</p><ul className="space-y-2 text-sm text-muted">{items.map((item) => <li key={item}>{item}</li>)}</ul></div>;
 }
