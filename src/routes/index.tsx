@@ -2,15 +2,15 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ArrowUpRight, Download, Linkedin } from "lucide-react";
 import { useEffect, useRef } from "react";
 
-import canvaIcon from "@/assets/brand-icons/canva.svg.asset.json";
+import afterEffectsIcon from "@/assets/brand-icons/after-effects.svg.asset.json";
 import chatgptIcon from "@/assets/brand-icons/chatgpt.svg.asset.json";
-import dalleIcon from "@/assets/brand-icons/dalle.svg.asset.json";
 import figmaIcon from "@/assets/brand-icons/figma.svg.asset.json";
 import filmoraIcon from "@/assets/brand-icons/filmora.svg.asset.json";
+import googleFlowIcon from "@/assets/brand-icons/google-flow.svg.asset.json";
 import illustratorIcon from "@/assets/brand-icons/illustrator.svg.asset.json";
 import midjourneyIcon from "@/assets/brand-icons/midjourney.svg.asset.json";
 import photoshopIcon from "@/assets/brand-icons/photoshop.svg.asset.json";
-import xdIcon from "@/assets/brand-icons/xd.svg.asset.json";
+import premiereIcon from "@/assets/brand-icons/premiere-pro.svg.asset.json";
 import portrait from "@/assets/profile-portrait.jpg";
 import auraImage from "@/assets/project-aura.jpg";
 import floraImage from "@/assets/project-flora.jpg";
@@ -84,12 +84,12 @@ const PORTFOLIO_DATA = {
       { name: "Figma", detail: "UI design, prototyping, design systems", icon: figmaIcon.url },
       { name: "Adobe Photoshop", detail: "Photo editing, compositing, digital art", icon: photoshopIcon.url },
       { name: "Adobe Illustrator", detail: "Logo design, illustration, branding", icon: illustratorIcon.url },
-      { name: "Adobe XD", detail: "UI/UX design, prototyping", icon: xdIcon.url },
-      { name: "Canva", detail: "Social media, marketing creatives", icon: canvaIcon.url },
-      { name: "Wondershare Filmora", detail: "Video editing, motion graphics", icon: filmoraIcon.url },
+      { name: "Adobe Premiere Pro", detail: "Professional video editing, color grading, post-production", icon: premiereIcon.url },
+      { name: "Adobe After Effects", detail: "Motion graphics, visual effects, compositing", icon: afterEffectsIcon.url },
+      { name: "Wondershare Filmora", detail: "Quick video editing, social cuts", icon: filmoraIcon.url },
       { name: "ChatGPT", detail: "Ideation, content writing, research", icon: chatgptIcon.url },
       { name: "Midjourney", detail: "AI image generation, concept visuals", icon: midjourneyIcon.url },
-      { name: "DALL·E", detail: "AI image generation, visual exploration", icon: dalleIcon.url },
+      { name: "Google Flow", detail: "Flowcharts, diagrams, visual mapping", icon: googleFlowIcon.url },
     ],
     skills: [
       { name: "Graphic Design", detail: "Visual communication, layout, composition" },
