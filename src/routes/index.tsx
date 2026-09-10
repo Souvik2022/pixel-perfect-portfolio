@@ -4,9 +4,13 @@ import { useEffect, useRef } from "react";
 
 import afterEffectsIcon from "@/assets/brand-icons/after-effects.svg.asset.json";
 import chatgptIcon from "@/assets/brand-icons/chatgpt.svg.asset.json";
+import claudeIcon from "@/assets/brand-icons/claude.svg.asset.json";
+import dalleIcon from "@/assets/brand-icons/dalle.svg.asset.json";
 import figmaIcon from "@/assets/brand-icons/figma.svg.asset.json";
 import filmoraIcon from "@/assets/brand-icons/filmora.svg.asset.json";
 import googleFlowIcon from "@/assets/brand-icons/google-flow.svg.asset.json";
+import googleVidsIcon from "@/assets/brand-icons/google-vids.svg.asset.json";
+import grokIcon from "@/assets/brand-icons/grok.svg.asset.json";
 import illustratorIcon from "@/assets/brand-icons/illustrator.svg.asset.json";
 import midjourneyIcon from "@/assets/brand-icons/midjourney.svg.asset.json";
 import photoshopIcon from "@/assets/brand-icons/photoshop.svg.asset.json";
@@ -20,10 +24,10 @@ import vesperImage from "@/assets/project-vesper.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Julian Thorne — Graphic Designer" },
-      { name: "description", content: "Julian Thorne is an independent graphic designer building visual identities, editorial systems, and digital experiences." },
-      { property: "og:title", content: "Julian Thorne — Graphic Designer" },
-      { property: "og:description", content: "Visual identities, editorial systems, and digital experiences with clarity and character." },
+      { title: "Saptanshu Raha — Graphic Designer" },
+      { name: "description", content: "Saptanshu Raha is a graphic designer in Kolkata creating social media creatives, brand visuals, and infographics for technology brands." },
+      { property: "og:title", content: "Saptanshu Raha — Graphic Designer" },
+      { property: "og:description", content: "Social media creatives, brand visuals, and infographics that make complex technology clear." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -33,63 +37,82 @@ export const Route = createFileRoute("/")({
 
 // Edit this single object to change the profile, projects, experience, and links.
 const PORTFOLIO_DATA = {
-  name: "Julian Thorne",
-  role: "Independent Graphic Designer",
-  location: "Berlin, Germany",
+  name: "Saptanshu Raha",
+  role: "Graphic Designer",
+  location: "Kolkata, India",
   availability: "Available for select projects",
-  email: "hello@julianthorne.design",
-  intro: "Crafting visual identities that reside at the intersection of Swiss precision and tactile expression.",
-  bio: "Focused on building systems for cultural institutions and independent brands. I believe that clarity is the foundation of character, and that every mark should serve a purpose.",
+  email: "hello@saptanshuraha.design",
+  intro: "From pixels and posters to products and experiences.",
+  bio: "I started as a graphic designer, learning to communicate ideas through visuals. Working across digital campaigns, websites, and interfaces changed the way I think about design — today I create work that is clear, intuitive, and purposeful.",
   behance: "https://www.behance.net/",
+  linkedin: "https://www.linkedin.com/",
+  cv: "/saptanshu-raha-cv.pdf",
   projects: [
     {
-      title: "Vesper Monograph",
-      category: "Identity & publication design",
-      description: "A comprehensive identity and publication system for a Zurich-based architecture collective exploring raw materiality.",
+      title: "B2B Tech Campaigns",
+      category: "Social media & campaign design",
+      description: "LinkedIn creatives, carousel posts, and campaign visuals that translate AI, software, and digital transformation into accessible content.",
       image: vesperImage,
       number: "01",
       href: "https://www.behance.net/",
     },
     {
-      title: "Flora Rituals",
-      category: "Packaging & art direction",
-      description: "A tactile packaging system for a botanical skincare studio rooted in slow rituals.",
+      title: "Tech Infographic Series",
+      category: "Infographic & information design",
+      description: "Infographic-style content explaining emerging technologies through visual hierarchy and structured storytelling for B2B audiences.",
       image: floraImage,
       number: "02",
       href: "https://www.behance.net/",
     },
     {
-      title: "Aura Gallery",
-      category: "Digital exhibition platform",
-      description: "A typography-led digital space for a gallery that treats every exhibition as a living archive.",
+      title: "Brand Marketing Creatives",
+      category: "Brand & marketing design",
+      description: "Brand-consistent social and promotional graphics for technology businesses, adapted to different identities and marketing goals.",
       image: auraImage,
       number: "03",
       href: "https://www.behance.net/",
     },
     {
-      title: "Modul Jazz",
-      category: "Campaign identity & motion",
-      description: "A kinetic typographic system for an international experimental jazz circuit.",
+      title: "Book Cover Design",
+      category: "Editorial & cover design",
+      description: "Visually engaging book covers shaped by subject, genre, and each author's requirements.",
       image: modulImage,
       number: "04",
       href: "https://www.behance.net/",
     },
   ],
   experience: [
-    { studio: "Studio Form, Berlin", role: "Senior Designer", years: "2021 — Present", detail: "Leading visual identities for cultural brands with a focus on typography-led systems and editorial direction." },
-    { studio: "Kinetik, London", role: "Visual Designer", years: "2018 — 2021", detail: "Built digital-first identity systems and interaction design frameworks for emerging technology studios." },
+    {
+      studio: "SentientGeeks",
+      role: "Graphic Designer",
+      years: "Kolkata, India — Present",
+      detail: "Designing social media creatives, LinkedIn carousels, infographics, and campaign assets that turn complex AI and software topics into clear visual stories for B2B audiences.",
+    },
+    {
+      studio: "Sourcedesk Global",
+      role: "Jr. Graphic Designer",
+      years: "Kolkata, India",
+      detail: "Created social media creatives, book covers, banners, and infographics for clients across industries — working directly with them to deliver customized design solutions.",
+    },
   ],
+  clients: ["SentientGeeks", "ConvexSol", "RPM DXB", "TapApp"],
   expertise: {
     tools: [
       { name: "Figma", detail: "UI design, prototyping, design systems", icon: figmaIcon.url },
       { name: "Adobe Photoshop", detail: "Photo editing, compositing, digital art", icon: photoshopIcon.url },
-      { name: "Adobe Illustrator", detail: "Logo design, illustration, branding", icon: illustratorIcon.url },
-      { name: "Adobe Premiere Pro", detail: "Professional video editing, color grading, post-production", icon: premiereIcon.url },
-      { name: "Adobe After Effects", detail: "Motion graphics, visual effects, compositing", icon: afterEffectsIcon.url },
+      { name: "Adobe Illustrator", detail: "Illustration, logo design, branding", icon: illustratorIcon.url },
+      { name: "Adobe Premiere Pro", detail: "Video editing, post-production", icon: premiereIcon.url },
+      { name: "Adobe After Effects", detail: "Motion graphics, visual effects", icon: afterEffectsIcon.url },
       { name: "Wondershare Filmora", detail: "Quick video editing, social cuts", icon: filmoraIcon.url },
-      { name: "ChatGPT", detail: "Ideation, content writing, research", icon: chatgptIcon.url },
-      { name: "Midjourney", detail: "AI image generation, concept visuals", icon: midjourneyIcon.url },
-      { name: "Google Flow", detail: "Flowcharts, diagrams, visual mapping", icon: googleFlowIcon.url },
+    ],
+    aiTools: [
+      { name: "ChatGPT", detail: "Ideation, writing, research", icon: chatgptIcon.url },
+      { name: "Midjourney", detail: "Image generation, concept visuals", icon: midjourneyIcon.url },
+      { name: "DALL·E", detail: "AI image generation, visual exploration", icon: dalleIcon.url },
+      { name: "Google Flow", detail: "AI video generation, creative production", icon: googleFlowIcon.url },
+      { name: "Grok", detail: "Research, ideas & exploration", icon: grokIcon.url },
+      { name: "Claude", detail: "Writing, analysis & ideation", icon: claudeIcon.url },
+      { name: "Google Vids", detail: "AI video creation, presentation", icon: googleVidsIcon.url },
     ],
     skills: [
       { name: "Graphic Design", detail: "Visual communication, layout, composition" },
@@ -99,8 +122,12 @@ const PORTFOLIO_DATA = {
       { name: "Website Design", detail: "Landing pages, marketing websites, UI visuals" },
       { name: "Infographic Design", detail: "Data visualization, information design" },
       { name: "Presentation Design", detail: "Pitch decks, business presentations" },
-      { name: "Video Editing", detail: "Motion graphics, promotional videos" },
-      { name: "AI-assisted Design", detail: "Concept generation, image creation, ideation" },
+      { name: "Video Editing", detail: "Editing, motion graphics, post-production" },
+      { name: "Photography", detail: "Product, lifestyle, event photography" },
+      { name: "Videography", detail: "Shooting, editing, visual storytelling" },
+      { name: "Podcast Production", detail: "Audio-visual recording, setup, editing" },
+      { name: "Event Production", detail: "Event coverage, candid photography & video" },
+      { name: "AI-Assisted Design", detail: "AI image/video generation, concept development" },
       { name: "Problem Solving", detail: "Creative thinking, visual storytelling, iteration" },
     ],
   },
@@ -134,7 +161,7 @@ function Portfolio() {
 
       <aside className="relative z-10 flex w-full flex-col border-b border-line bg-paper p-5 md:fixed md:inset-y-0 md:left-0 md:w-72 md:border-b-0 md:border-r md:p-8">
         <div data-reveal>
-          <img src={portrait} alt="Portrait of Julian Thorne" width={512} height={512} loading="eager" className="mb-5 size-16 rounded-md object-cover grayscale" />
+          <img src={portrait} alt={`Portrait of ${PORTFOLIO_DATA.name}`} width={512} height={512} loading="eager" className="mb-5 size-16 rounded-md object-cover grayscale" />
           <h1 className="text-lg font-medium tracking-tight">{PORTFOLIO_DATA.name}</h1>
           <p className="mt-1 text-sm text-muted">{PORTFOLIO_DATA.role}</p>
         </div>
@@ -150,7 +177,7 @@ function Portfolio() {
         <div className="mt-8 grid grid-cols-2 gap-5 border-t border-line pt-5 text-xs md:mt-auto md:block md:space-y-6 md:border-t-0 md:pt-0" data-reveal>
           <div className="space-y-1">
             <p className="text-[10px] uppercase tracking-wider text-muted">Currently</p>
-            <p className="leading-relaxed">Independent designer<br />{PORTFOLIO_DATA.location}</p>
+            <p className="leading-relaxed">Graphic designer<br />{PORTFOLIO_DATA.location}</p>
           </div>
           <div className="space-y-1">
             <p className="text-[10px] uppercase tracking-wider text-muted">Availability</p>
@@ -165,15 +192,15 @@ function Portfolio() {
 
         <div className="mt-4 flex items-center gap-4 text-muted" data-reveal>
           <a href={PORTFOLIO_DATA.behance} target="_blank" rel="noreferrer" aria-label="Behance" className="transition-colors hover:text-vermillion">Be</a>
-          <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="transition-colors hover:text-vermillion"><Linkedin size={14} strokeWidth={1.5} /></a>
-          <a href="/julian-thorne-cv.pdf" download className="ml-auto flex items-center gap-1.5 text-[11px] transition-colors hover:text-vermillion" aria-label="Download CV"><Download size={13} strokeWidth={1.5} /> CV</a>
+          <a href={PORTFOLIO_DATA.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="transition-colors hover:text-vermillion"><Linkedin size={14} strokeWidth={1.5} /></a>
+          <a href={PORTFOLIO_DATA.cv} download className="ml-auto flex items-center gap-1.5 text-[11px] transition-colors hover:text-vermillion" aria-label="Download CV"><Download size={13} strokeWidth={1.5} /> CV</a>
         </div>
       </aside>
 
       <main className="md:ml-72">
         <section className="border-b border-line px-5 pb-16 pt-16 md:px-12 md:pb-20 md:pt-24 lg:px-16 lg:pt-28" data-reveal>
           <div className="max-w-[56ch]">
-            <p className="mb-6 font-mono text-[10px] uppercase tracking-[0.2em] text-vermillion">Visual communication / 2024</p>
+            <p className="mb-6 font-mono text-[10px] uppercase tracking-[0.2em] text-vermillion">Design journey / 2026</p>
             <h2 className="font-serif text-4xl italic leading-[1.02] sm:text-5xl lg:text-6xl">{PORTFOLIO_DATA.intro}</h2>
             <p className="mt-8 max-w-[46ch] text-base leading-relaxed text-muted">{PORTFOLIO_DATA.bio}</p>
           </div>
@@ -181,8 +208,8 @@ function Portfolio() {
 
         <section id="works" className="scroll-mt-8 px-5 py-16 md:px-12 md:py-20 lg:px-16 lg:py-24">
           <div className="mb-14 flex items-end justify-between gap-6" data-reveal>
-            <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">Selected projects / 2022–2024</h3>
-            <span className="hidden font-mono text-[10px] text-muted sm:block">Collected works vol. II</span>
+            <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">Selected projects</h3>
+            <span className="hidden font-mono text-[10px] text-muted sm:block">Collected works vol. I</span>
           </div>
 
           <div className="grid grid-cols-1 gap-x-6 gap-y-14 md:grid-cols-2 lg:gap-x-8 xl:grid-cols-3">
@@ -215,30 +242,46 @@ function Portfolio() {
             <div>
               <p className="font-serif text-2xl italic leading-tight md:text-[28px]">Good ideas deserve the right tools, skills, and perspective.</p>
               <div data-line className="mt-8 h-px w-full bg-line md:mt-10" />
-              <div className="mt-9 grid gap-12 xl:grid-cols-2 xl:gap-0">
-                <div className="xl:pr-12">
+              <div className="mt-9 grid gap-12 xl:grid-cols-3 xl:gap-10">
+                <div>
                   <p className="mb-6 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">Tools &amp; software</p>
                   <ul className="space-y-3.5">
-                    {PORTFOLIO_DATA.expertise.tools.map((tool) => {
-                      return (
-                        <li key={tool.name} className="grid grid-cols-[24px_minmax(118px,0.7fr)_minmax(0,1.3fr)] items-center gap-3 text-[13px]">
-                          <span className="flex size-6 items-center justify-center" aria-hidden="true">
-                            <img src={tool.icon} alt="" width={24} height={24} loading="lazy" className="size-6 object-contain" />
-                          </span>
-                          <span className="font-medium text-ink">{tool.name}</span>
-                          <span className="text-xs leading-relaxed text-muted">{tool.detail}</span>
-                        </li>
-                      );
-                    })}
+                    {PORTFOLIO_DATA.expertise.tools.map((tool) => (
+                      <li key={tool.name} className="grid grid-cols-[24px_minmax(0,1fr)] items-center gap-3 text-[13px]">
+                        <span className="flex size-6 items-center justify-center" aria-hidden="true">
+                          <img src={tool.icon} alt="" width={24} height={24} loading="lazy" className="size-6 object-contain" />
+                        </span>
+                        <span className="min-w-0">
+                          <span className="block font-medium text-ink">{tool.name}</span>
+                          <span className="mt-0.5 block text-xs leading-relaxed text-muted">{tool.detail}</span>
+                        </span>
+                      </li>
+                    ))}
                   </ul>
                 </div>
-                <div className="border-t border-line pt-9 xl:border-l xl:border-t-0 xl:pl-12 xl:pt-0">
+                <div className="border-t border-line pt-9 xl:border-l xl:border-t-0 xl:pl-10 xl:pt-0">
+                  <p className="mb-6 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">AI tools</p>
+                  <ul className="space-y-3.5">
+                    {PORTFOLIO_DATA.expertise.aiTools.map((tool) => (
+                      <li key={tool.name} className="grid grid-cols-[24px_minmax(0,1fr)] items-center gap-3 text-[13px]">
+                        <span className="flex size-6 items-center justify-center" aria-hidden="true">
+                          <img src={tool.icon} alt="" width={24} height={24} loading="lazy" className="size-6 object-contain" />
+                        </span>
+                        <span className="min-w-0">
+                          <span className="block font-medium text-ink">{tool.name}</span>
+                          <span className="mt-0.5 block text-xs leading-relaxed text-muted">{tool.detail}</span>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="border-t border-line pt-9 xl:border-l xl:border-t-0 xl:pl-10 xl:pt-0">
                   <p className="mb-6 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">Skills</p>
                   <ul className="space-y-3.5">
                     {PORTFOLIO_DATA.expertise.skills.map((skill) => (
-                      <li key={skill.name} className="grid grid-cols-[minmax(125px,0.8fr)_minmax(0,1.2fr)] gap-4 text-[13px]">
-                        <span className="font-medium text-ink">{skill.name}</span>
-                        <span className="text-xs leading-relaxed text-muted">{skill.detail}</span>
+                      <li key={skill.name} className="text-[13px]">
+                        <span className="block font-medium text-ink">{skill.name}</span>
+                        <span className="mt-0.5 block text-xs leading-relaxed text-muted">{skill.detail}</span>
                       </li>
                     ))}
                   </ul>
@@ -264,17 +307,16 @@ function Portfolio() {
                 </div>
               ))}
               <div className="border-t border-line pt-12">
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">Education</p>
-                <h4 className="mt-6 text-lg font-medium">BFA in Graphic Design</h4>
-                <p className="mt-1 text-sm text-muted">Royal Academy of Art, The Hague</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">Selected clients</p>
+                <p className="mt-6 font-serif text-2xl italic leading-snug md:text-[28px]">{PORTFOLIO_DATA.clients.join(" · ")}</p>
               </div>
             </div>
           </div>
         </section>
 
         <footer id="contact" className="scroll-mt-8 flex flex-col gap-8 border-t border-line px-5 py-10 text-[10px] uppercase tracking-widest text-muted sm:flex-row sm:items-center sm:justify-between md:px-12 lg:px-16" data-reveal>
-          <div className="flex flex-wrap gap-x-8 gap-y-2"><span>© 2024 {PORTFOLIO_DATA.name}</span><span>Available globally</span></div>
-          <div className="flex gap-7 font-medium"><a href={PORTFOLIO_DATA.behance} target="_blank" rel="noreferrer" className="transition-colors hover:text-vermillion">Behance</a><a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" className="transition-colors hover:text-vermillion">LinkedIn</a><a href="/julian-thorne-cv.pdf" download className="transition-colors hover:text-vermillion">Download CV</a></div>
+          <div className="flex flex-wrap gap-x-8 gap-y-2"><span>© 2026 {PORTFOLIO_DATA.name}</span><span>Available globally</span></div>
+          <div className="flex gap-7 font-medium"><a href={PORTFOLIO_DATA.behance} target="_blank" rel="noreferrer" className="transition-colors hover:text-vermillion">Behance</a><a href={PORTFOLIO_DATA.linkedin} target="_blank" rel="noreferrer" className="transition-colors hover:text-vermillion">LinkedIn</a><a href={PORTFOLIO_DATA.cv} download className="transition-colors hover:text-vermillion">Download CV</a></div>
         </footer>
       </main>
     </div>
