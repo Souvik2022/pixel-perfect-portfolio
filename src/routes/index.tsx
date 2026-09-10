@@ -104,8 +104,6 @@ const PORTFOLIO_DATA = {
       { name: "Adobe Premiere Pro", detail: "Video editing, post-production", icon: premiereIcon.url },
       { name: "Adobe After Effects", detail: "Motion graphics, visual effects", icon: afterEffectsIcon.url },
       { name: "Wondershare Filmora", detail: "Quick video editing, social cuts", icon: filmoraIcon.url },
-    ],
-    aiTools: [
       { name: "ChatGPT", detail: "Ideation, writing, research", icon: chatgptIcon.url },
       { name: "Midjourney", detail: "Image generation, concept visuals", icon: midjourneyIcon.url },
       { name: "DALL·E", detail: "AI image generation, visual exploration", icon: dalleIcon.url },
