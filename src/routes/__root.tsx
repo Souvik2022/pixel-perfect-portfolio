@@ -11,6 +11,8 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { ThemeProvider } from "../components/theme-provider";
+import { TopRightThemeSwitcher } from "../components/top-right-theme-switcher";
 
 function NotFoundComponent() {
   return (
@@ -78,10 +80,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Saptanshu Raha — Graphic Designer" },
-      { name: "description", content: "Graphic designer in Kolkata creating social media creatives, brand visuals, and infographics for technology brands." },
+      {
+        name: "description",
+        content:
+          "Graphic designer in Kolkata creating social media creatives, brand visuals, and infographics for technology brands.",
+      },
       { name: "author", content: "Saptanshu Raha" },
       { property: "og:title", content: "Saptanshu Raha — Graphic Designer" },
-      { property: "og:description", content: "Graphic designer in Kolkata creating social media creatives, brand visuals, and infographics for technology brands." },
+      {
+        property: "og:description",
+        content:
+          "Graphic designer in Kolkata creating social media creatives, brand visuals, and infographics for technology brands.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -107,8 +117,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("portfolio-theme");if(t==="dark"||(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark");document.documentElement.setAttribute("data-theme","dark");}else if(t==="dim"){document.documentElement.classList.add("dark","dim");document.documentElement.setAttribute("data-theme","dim");}else{document.documentElement.setAttribute("data-theme","light");}}catch(e){}})()`,
+          }}
+        />
         <HeadContent />
       </head>
       <body>
@@ -124,8 +139,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <ThemeProvider>
+        <TopRightThemeSwitcher />
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

@@ -51,12 +51,71 @@
   --canva: oklch(0.68 0.16 195);
   --filmora: oklch(0.56 0.13 185);
   --chatgpt: oklch(0.61 0.12 169);
+
+  /* Liquid Glass switcher theme tokens */
+  --c-glass: #bbbbbc;
+  --c-light: #ffffff;
+  --c-dark: #000000;
+  --c-content: oklch(0.19 0.012 80);
+  --c-action: oklch(0.62 0.19 32);
+  --glass-reflex-dark: 1;
+  --glass-reflex-light: 1;
+  --saturation: 150%;
+}
+
+:root.dark,
+[data-theme="dark"] {
+  --background: oklch(0.15 0.01 260);
+  --foreground: oklch(0.95 0.005 80);
+  --paper: oklch(0.15 0.01 260);
+  --ink: oklch(0.95 0.005 80);
+  --surface: oklch(0.2 0.012 260);
+  --vermillion: oklch(0.68 0.2 32);
+  --muted: oklch(0.65 0.01 260);
+  --line: oklch(0.95 0.005 80 / 12%);
+
+  --c-glass: #bbbbbc;
+  --c-light: #ffffff;
+  --c-dark: #000000;
+  --c-content: #f4f4f6;
+  --c-action: oklch(0.68 0.2 32);
+  --glass-reflex-dark: 2;
+  --glass-reflex-light: 0.3;
+  --saturation: 150%;
+}
+
+:root.dim,
+[data-theme="dim"] {
+  --background: #111b27;
+  --foreground: #e2e8f0;
+  --paper: #0f172a;
+  --ink: #f1f5f9;
+  --surface: #1e293b;
+  --vermillion: oklch(0.7 0.19 32);
+  --muted: #94a3b8;
+  --line: rgba(226, 232, 240, 0.12);
+
+  --c-light: #99deff;
+  --c-dark: #101926;
+  --c-glass: hsl(215 40% 40% / 0.6);
+  --c-content: #d5dbe2;
+  --c-action: #38bdf8;
+  --glass-reflex-dark: 1.8;
+  --glass-reflex-light: 0.6;
+  --saturation: 180%;
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
+  * {
+    border-color: var(--color-border);
+  }
 
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+    transition:
+      background-color 200ms ease,
+      color 200ms ease;
+  }
 
   body {
     min-width: 320px;
@@ -65,6 +124,9 @@
     font-family: var(--font-sans);
     font-synthesis: none;
     text-rendering: optimizeLegibility;
+    transition:
+      background-color 200ms ease,
+      color 200ms ease;
   }
 
   ::selection {
@@ -74,17 +136,251 @@
 }
 
 @keyframes pulse-mark {
-  0%, 100% { opacity: 0.45; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1); }
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @utility pulse-mark {
   animation: pulse-mark 2.4s ease-in-out infinite;
 }
 
+/* Keyframes for Apple Liquid Glass Switcher */
+@keyframes scaleToggle {
+  0% {
+    scale: 1 1;
+  }
+  50% {
+    scale: 1.1 1;
+  }
+  100% {
+    scale: 1 1;
+  }
+}
+
+@keyframes scaleToggle2 {
+  0% {
+    scale: 1 1;
+  }
+  50% {
+    scale: 1.2 1;
+  }
+  100% {
+    scale: 1 1;
+  }
+}
+
+@keyframes scaleToggle3 {
+  0% {
+    scale: 1 1;
+  }
+  50% {
+    scale: 1.1 1;
+  }
+  100% {
+    scale: 1 1;
+  }
+}
+
+/* Apple Liquid Glass Switcher Component Styles */
+.switcher {
+  position: relative;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 216px;
+  max-width: 216px;
+  height: 58px;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  margin: 0;
+  border: none;
+  border-radius: 99em;
+  background-color: color-mix(in srgb, var(--c-glass) 14%, transparent);
+  backdrop-filter: blur(12px) url(#switcher) saturate(var(--saturation));
+  -webkit-backdrop-filter: blur(12px) saturate(var(--saturation));
+  box-shadow:
+    inset 0 0 0 1px
+      color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 12%), transparent),
+    inset 1.8px 3px 0px -2px
+      color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent),
+    inset -2px -2px 0px -2px
+      color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent),
+    inset -3px -8px 1px -6px
+      color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent),
+    inset -0.3px -1px 4px 0px
+      color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent),
+    inset -1.5px 2.5px 0px -2px
+      color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent),
+    inset 0px 3px 4px -2px
+      color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent),
+    inset 2px -6.5px 1px -4px
+      color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent),
+    0px 1px 5px 0px
+      color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent),
+    0px 6px 16px 0px
+      color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent);
+  transition:
+    background-color 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.switcher__legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
+.switcher__input {
+  clip: rect(0 0 0 0);
+  clip-path: inset(100%);
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}
+
+.switcher__icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  transition:
+    transform 160ms cubic-bezier(0.16, 1, 0.3, 1),
+    scale 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.switcher__filter {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.switcher__option {
+  --c: var(--c-content);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: 99em;
+  opacity: 1;
+  cursor: pointer;
+  transition: all 140ms ease;
+  user-select: none;
+}
+
+.switcher__option:hover {
+  --c: var(--c-action);
+}
+
+.switcher__option:hover .switcher__icon {
+  scale: 1.15;
+}
+
+.switcher__option:has(input:checked) {
+  --c: var(--c-content);
+  cursor: default;
+}
+
+.switcher__option:has(input:checked) .switcher__icon {
+  scale: 1;
+}
+
+.switcher::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  display: block;
+  width: 64px;
+  height: calc(100% - 12px);
+  border-radius: 99em;
+  background-color: color-mix(in srgb, var(--c-glass) 38%, transparent);
+  backdrop-filter: blur(4px) url(#toggler);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: -1;
+  box-shadow:
+    inset 0 0 0 1px
+      color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 12%), transparent),
+    inset 2px 1px 0px -1px
+      color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent),
+    inset -1.5px -1px 0px -1px
+      color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent),
+    inset -2px -6px 1px -5px
+      color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent),
+    inset -1px 2px 3px -1px
+      color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent),
+    inset 0px -4px 1px -2px
+      color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent),
+    0px 3px 6px 0px
+      color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent);
+}
+
+.switcher:has(input[value="light"]:checked)::after {
+  translate: 0 0;
+  transform-origin: right;
+  transition:
+    background-color 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    translate 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: scaleToggle 220ms ease;
+}
+
+.switcher:has(input[value="dark"]:checked)::after {
+  translate: 68px 0;
+  transition:
+    background-color 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    translate 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: scaleToggle2 220ms ease;
+}
+
+.switcher[data-previous="1"]:has(input[value="dark"]:checked)::after,
+.switcher[c-previous="1"]:has(input[value="dark"]:checked)::after {
+  transform-origin: left;
+}
+
+.switcher[data-previous="3"]:has(input[value="dark"]:checked)::after,
+.switcher[c-previous="3"]:has(input[value="dark"]:checked)::after {
+  transform-origin: right;
+}
+
+.switcher:has(input[value="dim"]:checked)::after {
+  translate: 136px 0;
+  transform-origin: left;
+  transition:
+    background-color 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    translate 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: scaleToggle3 220ms ease;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
