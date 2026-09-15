@@ -1,9 +1,17 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
+import sgLogo from "@/images/logos/SG Logo 1 colored.png";
+import convexSolLogo from "@/images/logos/Group 1000013899 2.png";
+import rpmLogo from "@/images/logos/Layer 1 2.png";
+import tapappLogo from "@/images/logos/LOGO.png";
+import qmiLogo from "@/images/logos/Logo-QMI-Silver-2 1.png";
+
 export interface LogoItem {
   name: string;
+  image?: string;
   Icon?: React.ComponentType<{ className?: string }>;
+  className?: string;
 }
 
 export interface LogoCloudProps {
@@ -13,83 +21,33 @@ export interface LogoCloudProps {
   duration?: number;
 }
 
-// Custom modern SVG icons tailored for the portfolio clients
-export const SentientGeeksIcon: React.FC<{ className?: string }> = ({ className = "size-4" }) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-    aria-hidden="true"
-  >
-    <path d="M12 2L2 7l10 5 10-5-10-5z" />
-    <path d="M2 17l10 5 10-5" />
-    <path d="M2 12l10 5 10-5" />
-  </svg>
-);
-
-export const ConvexSolIcon: React.FC<{ className?: string }> = ({ className = "size-4" }) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-    aria-hidden="true"
-  >
-    <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2" />
-    <line x1="12" y1="22" x2="12" y2="15.5" />
-    <polyline points="22 8.5 12 15.5 2 8.5" />
-  </svg>
-);
-
-export const RpmDxbIcon: React.FC<{ className?: string }> = ({ className = "size-4" }) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-    aria-hidden="true"
-  >
-    <circle cx="12" cy="12" r="10" />
-    <path d="m14 10-4 4" />
-    <path d="M12 6v2" />
-    <path d="M6 12h2" />
-    <path d="M16 12h2" />
-  </svg>
-);
-
-export const TapAppIcon: React.FC<{ className?: string }> = ({ className = "size-4" }) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-    aria-hidden="true"
-  >
-    <rect width="14" height="20" x="5" y="2" rx="3" />
-    <path d="M12 18h.01" />
-    <circle cx="12" cy="9" r="2" />
-    <path d="M12 3v2" />
-  </svg>
-);
-
 export const DEFAULT_CLIENTS: LogoItem[] = [
-  { name: "SentientGeeks", Icon: SentientGeeksIcon },
-  { name: "ConvexSol", Icon: ConvexSolIcon },
-  { name: "RPM DXB", Icon: RpmDxbIcon },
-  { name: "TapApp", Icon: TapAppIcon },
+  {
+    name: "SentientGeeks",
+    image: sgLogo,
+    className: "h-7 md:h-8 max-w-[150px]",
+  },
+  {
+    name: "ConvexSol",
+    image: convexSolLogo,
+    className:
+      "h-5 md:h-6 max-w-[150px] drop-shadow-[0_1px_1px_rgba(0,0,0,0.7)] dark:drop-shadow-none",
+  },
+  {
+    name: "RPM DXB",
+    image: rpmLogo,
+    className: "h-7 md:h-8 max-w-[160px]",
+  },
+  {
+    name: "TapApp",
+    image: tapappLogo,
+    className: "h-7 md:h-8 max-w-[140px]",
+  },
+  {
+    name: "QMI",
+    image: qmiLogo,
+    className: "h-8 md:h-9 max-w-[90px]",
+  },
 ];
 
 export function LogoCloudBlock({
@@ -126,22 +84,30 @@ export function LogoCloudBlock({
       )}
 
       <div className="logo-cloud-mask relative mt-6 w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-        <div className="logo-cloud-track flex w-max items-center py-2">
+        <div className="logo-cloud-track flex w-max items-center py-3">
           {displayItems.map((item, index) => (
             <div
               key={`${item.name}-${index}`}
-              className="group/item flex shrink-0 items-center gap-3 px-8 text-muted transition-colors duration-200 hover:text-ink cursor-pointer"
+              className="group/item flex shrink-0 items-center px-5 cursor-pointer"
               aria-hidden={index >= items.length ? "true" : undefined}
             >
-              {item.Icon && (
-                <span className="flex size-7 items-center justify-center rounded-md border border-line bg-surface/70 text-ink shadow-xs transition-all duration-200 group-hover/item:border-vermillion/40 group-hover/item:text-vermillion group-hover/item:scale-110">
-                  <item.Icon className="size-4" />
-                </span>
-              )}
-              <span className="font-serif text-2xl italic leading-snug tracking-tight whitespace-nowrap text-ink transition-colors duration-200 group-hover/item:text-vermillion md:text-[28px]">
-                {item.name}
-              </span>
-              <span className="ml-4 font-serif text-sm text-line select-none" aria-hidden="true">
+              <div className="flex h-14 min-w-[130px] max-w-[200px] items-center justify-center rounded-xl border border-line bg-surface/70 px-5 py-2.5 shadow-xs backdrop-blur-xs transition-all duration-300 group-hover/item:border-vermillion/40 group-hover/item:bg-surface group-hover/item:scale-105 group-hover/item:shadow-sm">
+                {item.image ? (
+                  <img
+                    src={item.image}
+                    alt={`${item.name} logo`}
+                    className={cn(
+                      "w-auto object-contain transition-all duration-300",
+                      item.className,
+                    )}
+                  />
+                ) : (
+                  <span className="font-serif text-2xl italic leading-snug tracking-tight whitespace-nowrap text-ink transition-colors duration-200 group-hover/item:text-vermillion md:text-[28px]">
+                    {item.name}
+                  </span>
+                )}
+              </div>
+              <span className="ml-5 font-serif text-sm text-line select-none" aria-hidden="true">
                 ·
               </span>
             </div>

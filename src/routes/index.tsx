@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowUpRight, Download, Linkedin } from "lucide-react";
+import { Download, Linkedin } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { motion } from "motion/react";
 
@@ -7,6 +7,7 @@ import { TextAnimate } from "@/components/ui/text-animate";
 import { HyperText } from "@/components/ui/hyper-text";
 import { LogoCloudBlock } from "@/components/ui/logo-cloud-3";
 import { PixelLiquidBg } from "@/components/ui/pixel-liquid-bg";
+import { LiquidMetalButton } from "@/components/ui/liquid-metal-button";
 import { useTheme } from "@/components/theme-provider";
 
 import afterEffectsIcon from "@/assets/brand-icons/after-effects.svg";
@@ -23,11 +24,10 @@ import midjourneyIcon from "@/assets/brand-icons/midjourney.svg";
 import photoshopIcon from "@/assets/brand-icons/photoshop.svg";
 import premiereIcon from "@/assets/brand-icons/premiere-pro.svg";
 import portrait from "@/images/profilepic.png";
-import image1 from "@/images/image 1.png";
-import image2 from "@/images/image 2.png";
-import image3 from "@/images/image 3.png";
-import modulImage from "@/assets/project-modul.jpg";
-import vesperImage from "@/assets/project-vesper.jpg";
+import image1 from "@/images/image1.jpg";
+import image2 from "@/images/image2.jpg";
+import image3 from "@/images/image3.jpg";
+import image4 from "@/images/image4.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -57,7 +57,7 @@ const PORTFOLIO_DATA = {
   role: "Graphic Designer",
   location: "Kolkata, India",
   availability: "Available for select projects",
-  email: "hello@saptanshuraha.design",
+  email: "sptangshuraha@gmail.com",
   intro: "From pixels and posters to products and experiences.",
   bio: "I started as a graphic designer, learning to communicate ideas through visuals. Working across digital campaigns, websites, and interfaces changed the way I think about design — today I create work that is clear, intuitive, and purposeful.",
   behance: "https://www.behance.net/",
@@ -96,7 +96,7 @@ const PORTFOLIO_DATA = {
       category: "Editorial & cover design",
       description:
         "Visually engaging book covers shaped by subject, genre, and each author's requirements.",
-      image: modulImage,
+      image: image4,
       number: "04",
       href: "https://www.behance.net/",
     },
@@ -117,7 +117,7 @@ const PORTFOLIO_DATA = {
         "Created social media creatives, book covers, banners, and infographics for clients across industries — working directly with them to deliver customized design solutions.",
     },
   ],
-  clients: ["SentientGeeks", "ConvexSol", "RPM DXB", "TapApp"],
+  clients: ["SentientGeeks", "ConvexSol", "RPM DXB", "TapApp", "QMI"],
   expertise: {
     tools: [
       { name: "Figma", detail: "UI design, prototyping, design systems", icon: figmaIcon },
@@ -320,16 +320,16 @@ function Portfolio() {
           </div>
         </div>
 
-        <a
-          href={`mailto:${PORTFOLIO_DATA.email}`}
-          className="mt-7 flex items-center justify-between rounded-md bg-ink px-3 py-2.5 text-[13px] text-paper transition-transform hover:-translate-y-0.5 md:mt-8"
-          data-reveal
-        >
-          <span className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-vermillion" /> Inquire
-          </span>
-          <ArrowUpRight size={15} strokeWidth={1.5} />
-        </a>
+        <div className="mt-7 md:mt-8" data-reveal>
+          <LiquidMetalButton
+            label="Inquire"
+            width={224}
+            textColor="#ffffff"
+            onClick={() => {
+              window.location.href = `mailto:${PORTFOLIO_DATA.email}`;
+            }}
+          />
+        </div>
 
         <div className="mt-4 flex items-center gap-4 text-muted" data-reveal>
           <a
