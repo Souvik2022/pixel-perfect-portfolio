@@ -9,6 +9,7 @@ import { LogoCloudBlock } from "@/components/ui/logo-cloud-3";
 import { PixelLiquidBg } from "@/components/ui/pixel-liquid-bg";
 import { LiquidMetalButton } from "@/components/ui/liquid-metal-button";
 import { useTheme } from "@/components/theme-provider";
+import { CardContainer, CardBody, CardItem } from "@/components/ui/3d-card";
 
 import afterEffectsIcon from "@/assets/brand-icons/after-effects.svg";
 import chatgptIcon from "@/assets/brand-icons/chatgpt.svg";
@@ -28,6 +29,9 @@ import image1 from "@/images/image1.jpg";
 import image2 from "@/images/image2.jpg";
 import image3 from "@/images/image3.jpg";
 import image4 from "@/images/image4.jpg";
+import image5 from "@/images/image5.webp";
+import image6 from "@/images/image6.png";
+import image7 from "@/images/image7.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -60,45 +64,72 @@ const PORTFOLIO_DATA = {
   email: "sptangshuraha@gmail.com",
   intro: "From pixels and posters to products and experiences.",
   bio: "I started as a graphic designer, learning to communicate ideas through visuals. Working across digital campaigns, websites, and interfaces changed the way I think about design — today I create work that is clear, intuitive, and purposeful.",
-  behance: "https://www.behance.net/",
-  linkedin: "https://www.linkedin.com/",
+  behance: "https://www.behance.net/saptangshuraha",
+  linkedin: "https://www.linkedin.com/in/saptangshu-raha-406618231/",
   cv: "https://drive.google.com/file/d/1rbMtMdESjgH1n-y7BMUIVar6H4bLY_Xf/view",
   projects: [
     {
-      title: "B2B Tech Campaigns",
-      category: "Social media & campaign design",
+      title: "From Automation to Autonomy",
+      category: "B2B Technology · AI & Enterprise",
       description:
-        "LinkedIn creatives, carousel posts, and campaign visuals that translate AI, software, and digital transformation into accessible content.",
+        "Exploring the shift from rule-based automation to intelligent, adaptive, and autonomous enterprise systems.",
       image: image1,
       number: "01",
-      href: "https://www.behance.net/",
+      href: "https://www.behance.net/gallery/245812851/From-Automation-to-Autonomy",
     },
     {
-      title: "Tech Infographic Series",
-      category: "Infographic & information design",
+      title: "RPM — Moving & Relocation Campaigns",
+      category: "Social Media · Logistics & Moving",
       description:
-        "Infographic-style content explaining emerging technologies through visual hierarchy and structured storytelling for B2B audiences.",
+        "Premium social media campaigns communicating safe, reliable, and professional moving and relocation services.",
       image: image2,
       number: "02",
-      href: "https://www.behance.net/",
+      href: "https://www.behance.net/gallery/255681951/RPM",
     },
     {
-      title: "Brand Marketing Creatives",
-      category: "Brand & marketing design",
+      title: "Neutral Host Network — Indoor Connectivity",
+      category: "B2B Technology · Telecom & Connectivity",
       description:
-        "Brand-consistent social and promotional graphics for technology businesses, adapted to different identities and marketing goals.",
+        "Simplifying complex telecom concepts through visual storytelling around neutral host infrastructure and seamless indoor connectivity.",
       image: image3,
       number: "03",
-      href: "https://www.behance.net/",
+      href: "https://www.behance.net/gallery/255732715/Neutral-Host-Network-Indoor-Connectivity",
     },
     {
-      title: "Book Cover Design",
-      category: "Editorial & cover design",
+      title: "Microsoft 365 — Smarter IT, Lower Costs",
+      category: "B2B Technology · Microsoft 365",
       description:
-        "Visually engaging book covers shaped by subject, genre, and each author's requirements.",
+        "A B2B campaign communicating how Microsoft 365 enables smarter, more productive, and cost-efficient IT operations.",
       image: image4,
       number: "04",
-      href: "https://www.behance.net/",
+      href: "https://www.behance.net/gallery/255491217/Microsoft-365-Smarter-IT-Lower-Costs",
+    },
+    {
+      title: "Club & Event Poster",
+      category: "Event · Poster Design",
+      description:
+        "Bold event posters combining striking visuals, typography, and dynamic compositions to create an energetic promotional identity.",
+      image: image5,
+      number: "05",
+      href: "https://www.behance.net/gallery/216633141/Club-Event-Poster",
+    },
+    {
+      title: "Qentys — AI Search Visibility",
+      category: "Brand Identity · AI & Technology",
+      description:
+        "A modern AI-focused brand identity designed to communicate Qentys’ vision around search visibility and emerging AI technologies.",
+      image: image6,
+      number: "06",
+      href: "https://www.behance.net/gallery/255990497/Qentys-AI-Search-Visibility-Brand-Identity",
+    },
+    {
+      title: "Legends of Valor: Tales of Heroes and Divine Encounters",
+      category: "Editorial · Book Cover Design",
+      description:
+        "A fantasy-inspired editorial design combining dramatic imagery, mythology, and storytelling to create an immersive visual experience.",
+      image: image7,
+      number: "07",
+      href: "https://www.behance.net/gallery/216250475/Legends-of-Valor-Tales-of-Heroes-and-Divine-Encounters",
     },
   ],
   experience: [
@@ -428,71 +459,85 @@ function Portfolio() {
             </TextAnimate>
           </div>
 
-          <div className="grid grid-cols-1 gap-x-6 gap-y-14 md:grid-cols-2 lg:gap-x-8 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-12 md:grid-cols-2 lg:gap-x-8 xl:grid-cols-3">
             {PORTFOLIO_DATA.projects.map((project, index) => (
-              <article key={project.number} className="group min-w-0" data-reveal>
-                <a
-                  href={project.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block"
-                  aria-label={`View ${project.title} on Behance`}
-                >
-                  <div className="mb-6 overflow-hidden rounded-md bg-surface" data-line>
-                    <img
-                      src={project.image}
-                      alt={`${project.title} project artwork`}
-                      width={900}
-                      height={1080}
-                      loading="lazy"
-                      className="aspect-[5/6] w-full object-cover transition duration-700 ease-out group-hover:scale-[1.025]"
-                    />
-                  </div>
-                </a>
-                <div className="flex items-start justify-between gap-5">
-                  <div className="max-w-[40ch]">
-                    <TextAnimate
-                      animation="blurInUp"
-                      by="word"
-                      as="h4"
-                      className="font-serif text-xl italic"
-                      delay={0.05}
-                    >
-                      {project.title}
-                    </TextAnimate>
-                    <TextAnimate
-                      animation="blurInUp"
-                      by="word"
-                      as="p"
-                      className="mt-2 text-[13px] leading-relaxed text-muted"
-                      delay={0.1}
-                    >
-                      {project.description}
-                    </TextAnimate>
-                    <TextAnimate
-                      animation="blurInUp"
-                      by="word"
-                      as="p"
-                      className="mt-3 font-mono text-[10px] uppercase tracking-wider text-muted"
-                      delay={0.15}
-                    >
-                      {project.category}
-                    </TextAnimate>
-                  </div>
-                  <div className="flex shrink-0 flex-col items-end gap-2">
-                    <span className="font-mono text-[10px] text-muted">
-                      [ {String(index + 1).padStart(2, "0")} ]
-                    </span>
-                    <a
-                      href={project.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="border-b border-ink pb-0.5 text-xs transition-colors hover:border-vermillion hover:text-vermillion"
-                    >
-                      Behance
-                    </a>
-                  </div>
-                </div>
+              <article key={project.number} className="min-w-0" data-reveal>
+                <CardContainer className="w-full">
+                  <CardBody className="group/card relative w-full rounded-2xl border border-line/60 bg-surface/50 p-4 transition-all duration-300 hover:border-line hover:bg-surface/80 hover:shadow-2xl dark:border-white/10 dark:bg-white/[0.02] dark:hover:border-white/20 dark:hover:bg-white/[0.04]">
+                    <CardItem translateZ={50} className="w-full">
+                      <a
+                        href={project.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block"
+                        aria-label={`View ${project.title} on Behance`}
+                      >
+                        <div className="mb-5 overflow-hidden rounded-xl bg-surface shadow-sm" data-line>
+                          <img
+                            src={project.image}
+                            alt={`${project.title} project artwork`}
+                            width={900}
+                            height={1080}
+                            loading="lazy"
+                            className="aspect-[5/6] w-full object-cover transition duration-700 ease-out group-hover/card:scale-[1.03]"
+                          />
+                        </div>
+                      </a>
+                    </CardItem>
+                    <div className="flex items-start justify-between gap-4 pt-1">
+                      <div className="max-w-[36ch]">
+                        <CardItem translateZ={40} className="block">
+                          <TextAnimate
+                            animation="blurInUp"
+                            by="word"
+                            as="h4"
+                            className="font-serif text-xl italic"
+                            delay={0.05}
+                          >
+                            {project.title}
+                          </TextAnimate>
+                        </CardItem>
+                        <CardItem translateZ={30} className="block">
+                          <TextAnimate
+                            animation="blurInUp"
+                            by="word"
+                            as="p"
+                            className="mt-2 text-[13px] leading-relaxed text-muted"
+                            delay={0.1}
+                          >
+                            {project.description}
+                          </TextAnimate>
+                        </CardItem>
+                        <CardItem translateZ={25} className="block">
+                          <TextAnimate
+                            animation="blurInUp"
+                            by="word"
+                            as="p"
+                            className="mt-3 font-mono text-[10px] uppercase tracking-wider text-muted"
+                            delay={0.15}
+                          >
+                            {project.category}
+                          </TextAnimate>
+                        </CardItem>
+                      </div>
+                      <div className="flex shrink-0 flex-col items-end gap-2">
+                        <CardItem translateZ={25} as="span" className="font-mono text-[10px] text-muted">
+                          [ {String(index + 1).padStart(2, "0")} ]
+                        </CardItem>
+                        <CardItem translateZ={35}>
+                          <a
+                            href={project.href}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="border-b border-ink pb-0.5 text-xs transition-colors hover:border-vermillion hover:text-vermillion"
+                          >
+                            Behance
+                          </a>
+                        </CardItem>
+                      </div>
+                    </div>
+                  </CardBody>
+                </CardContainer>
               </article>
             ))}
           </div>
