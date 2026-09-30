@@ -13,15 +13,9 @@ import { CardContainer, CardBody, CardItem } from "@/components/ui/3d-card";
 
 import afterEffectsIcon from "@/assets/brand-icons/after-effects.svg";
 import chatgptIcon from "@/assets/brand-icons/chatgpt.svg";
-import claudeIcon from "@/assets/brand-icons/claude.svg";
-import dalleIcon from "@/assets/brand-icons/dalle.svg";
 import figmaIcon from "@/assets/brand-icons/figma.svg";
 import filmoraIcon from "@/assets/brand-icons/filmora.svg";
-import googleFlowIcon from "@/assets/brand-icons/google-flow.svg";
-import googleVidsIcon from "@/assets/brand-icons/google-vids.svg";
-import grokIcon from "@/assets/brand-icons/grok.svg";
 import illustratorIcon from "@/assets/brand-icons/illustrator.svg";
-import midjourneyIcon from "@/assets/brand-icons/midjourney.svg";
 import photoshopIcon from "@/assets/brand-icons/photoshop.svg";
 import premiereIcon from "@/assets/brand-icons/premiere-pro.svg";
 import portrait from "@/images/profilepic.png";
@@ -136,14 +130,14 @@ const PORTFOLIO_DATA = {
     {
       studio: "SentientGeeks",
       role: "Graphic Designer",
-      years: "Kolkata, India — Present",
+      years: "May 2025 — Present",
       detail:
         "Designing social media creatives, LinkedIn carousels, infographics, and campaign assets that turn complex AI and software topics into clear visual stories for B2B audiences.",
     },
     {
       studio: "Sourcedesk Global",
       role: "Jr. Graphic Designer",
-      years: "Kolkata, India",
+      years: "Jun 2022 — May 2025",
       detail:
         "Created social media creatives, book covers, banners, and infographics for clients across industries — working directly with them to deliver customized design solutions.",
     },
@@ -151,7 +145,6 @@ const PORTFOLIO_DATA = {
   clients: ["SentientGeeks", "ConvexSol", "RPM DXB", "TapApp", "QMI"],
   expertise: {
     tools: [
-      { name: "Figma", detail: "UI design, prototyping, design systems", icon: figmaIcon },
       {
         name: "Adobe Photoshop",
         detail: "Photo editing, compositing, digital art",
@@ -162,7 +155,8 @@ const PORTFOLIO_DATA = {
         detail: "Illustration, logo design, branding",
         icon: illustratorIcon,
       },
-      { name: "Adobe Premiere Pro", detail: "Video editing, post-production", icon: premiereIcon },
+      { name: "Figma", detail: "UI design, prototyping, design systems", icon: figmaIcon },
+      { name: "Adobe Premiere Pro", detail: "Video editing", icon: premiereIcon },
       {
         name: "Adobe After Effects",
         detail: "Motion graphics, visual effects",
@@ -174,16 +168,6 @@ const PORTFOLIO_DATA = {
         icon: filmoraIcon,
       },
       { name: "ChatGPT", detail: "Ideation, writing, research", icon: chatgptIcon },
-      { name: "Midjourney", detail: "Image generation, concept visuals", icon: midjourneyIcon },
-      { name: "DALL·E", detail: "AI image generation, visual exploration", icon: dalleIcon },
-      {
-        name: "Google Flow",
-        detail: "AI video generation, creative production",
-        icon: googleFlowIcon,
-      },
-      { name: "Grok", detail: "Research, ideas & exploration", icon: grokIcon },
-      { name: "Claude", detail: "Writing, analysis & ideation", icon: claudeIcon },
-      { name: "Google Vids", detail: "AI video creation, presentation", icon: googleVidsIcon },
     ],
     skills: [
       { name: "Graphic Design", detail: "Visual communication, layout, composition" },
@@ -193,13 +177,7 @@ const PORTFOLIO_DATA = {
       { name: "Website Design", detail: "Landing pages, marketing websites, UI visuals" },
       { name: "Infographic Design", detail: "Data visualization, information design" },
       { name: "Presentation Design", detail: "Pitch decks, business presentations" },
-      { name: "Video Editing", detail: "Editing, motion graphics, post-production" },
-      { name: "Photography", detail: "Product, lifestyle, event photography" },
-      { name: "Videography", detail: "Shooting, editing, visual storytelling" },
-      { name: "Podcast Production", detail: "Audio-visual recording, setup, editing" },
-      { name: "Event Production", detail: "Event coverage, candid photography & video" },
-      { name: "AI-Assisted Design", detail: "AI image/video generation, concept development" },
-      { name: "Problem Solving", detail: "Creative thinking, visual storytelling, iteration" },
+      { name: "Video Editing", detail: "Editing, motion graphics" },
     ],
   },
 };
