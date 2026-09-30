@@ -83,15 +83,15 @@ export function LogoCloudBlock({
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">{title}</p>
       )}
 
-      <div className="logo-cloud-mask relative mt-6 w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-        <div className="logo-cloud-track flex w-max items-center py-3">
+      <div className="logo-cloud-mask relative mt-6 w-full overflow-hidden [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+        <div className="logo-cloud-track flex w-max items-center py-2 sm:py-3 will-change-transform">
           {displayItems.map((item, index) => (
             <div
               key={`${item.name}-${index}`}
-              className="group/item flex shrink-0 items-center px-5 cursor-pointer"
+              className="group/item flex shrink-0 items-center px-3 sm:px-5 cursor-pointer"
               aria-hidden={index >= items.length ? "true" : undefined}
             >
-              <div className="flex h-14 min-w-[130px] max-w-[200px] items-center justify-center rounded-xl border border-line bg-surface/70 px-5 py-2.5 shadow-xs backdrop-blur-xs transition-all duration-300 group-hover/item:border-vermillion/40 group-hover/item:bg-surface group-hover/item:scale-105 group-hover/item:shadow-sm">
+              <div className="flex h-12 sm:h-14 min-w-[110px] sm:min-w-[130px] max-w-[160px] sm:max-w-[200px] items-center justify-center rounded-xl border border-line bg-surface/70 px-3.5 sm:px-5 py-2 sm:py-2.5 shadow-xs backdrop-blur-xs transition-all duration-300 group-hover/item:border-vermillion/40 group-hover/item:bg-surface group-hover/item:scale-105 group-hover/item:shadow-sm">
                 {item.image ? (
                   <img
                     src={item.image}
@@ -102,12 +102,15 @@ export function LogoCloudBlock({
                     )}
                   />
                 ) : (
-                  <span className="font-serif text-2xl italic leading-snug tracking-tight whitespace-nowrap text-ink transition-colors duration-200 group-hover/item:text-vermillion md:text-[28px]">
+                  <span className="font-serif text-xl sm:text-2xl italic leading-snug tracking-tight whitespace-nowrap text-ink transition-colors duration-200 group-hover/item:text-vermillion md:text-[28px]">
                     {item.name}
                   </span>
                 )}
               </div>
-              <span className="ml-5 font-serif text-sm text-line select-none" aria-hidden="true">
+              <span
+                className="ml-3 sm:ml-5 font-serif text-sm text-line select-none"
+                aria-hidden="true"
+              >
                 ·
               </span>
             </div>

@@ -41,7 +41,7 @@ const motionElements = {
 
 type MotionElementType = Extract<keyof DOMMotionComponents, keyof typeof motionElements>;
 
-export interface TextAnimateProps extends Omit<MotionProps, "children"> {
+export interface TextAnimateProps extends Omit<MotionProps, "children" | "viewport"> {
   /**
    * The text content to animate
    */
@@ -394,14 +394,16 @@ const TextAnimateBase = ({
           container: {
             ...defaultItemAnimationVariants[animation].container,
             show: {
-              ...defaultItemAnimationVariants[animation].container.show,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              ...((defaultItemAnimationVariants[animation].container as any)["show"] ?? {}),
               transition: {
                 delayChildren: delay,
                 staggerChildren: staggerDuration,
               },
             },
             exit: {
-              ...defaultItemAnimationVariants[animation].container.exit,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              ...((defaultItemAnimationVariants[animation].container as any)["exit"] ?? {}),
               transition: {
                 staggerChildren: staggerDuration,
                 staggerDirection: -1,
@@ -412,18 +414,30 @@ const TextAnimateBase = ({
         }
       : { container: defaultContainerVariants, item: defaultItemVariants };
 
+  const motionProps: Record<string, unknown> = {
+    variants: finalVariants.container as Variants,
+    initial: "hidden",
+    exit: "exit",
+    className: cn("whitespace-pre-wrap", className),
+    viewport: viewport ?? { once, margin: "0px 0px -40px 0px", amount: 0.1 },
+    ...props,
+  };
+
+  if (startOnView) {
+    motionProps["whileInView"] = "show";
+  } else {
+    motionProps["animate"] = "show";
+  }
+
+  if (accessible && children) {
+    motionProps["aria-label"] = children;
+  }
+
   return (
     <AnimatePresence mode="popLayout">
       <MotionComponent
-        variants={finalVariants.container as Variants}
-        initial="hidden"
-        whileInView={startOnView ? "show" : undefined}
-        animate={startOnView ? undefined : "show"}
-        exit="exit"
-        className={cn("whitespace-pre-wrap", className)}
-        viewport={viewport ?? { once, margin: "0px 0px -40px 0px", amount: 0.1 }}
-        aria-label={accessible ? children : undefined}
-        {...props}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        {...(motionProps as any)}
       >
         {accessible && <span className="sr-only">{children}</span>}
         {segments.map((segment, i) => (

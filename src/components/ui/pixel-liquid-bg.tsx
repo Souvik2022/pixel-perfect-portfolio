@@ -224,16 +224,20 @@ void main(){
 }
 `;
 
-type Uniforms = Record<string, { value: unknown }>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Uniforms = any;
 
 const DEFAULT_DARK_PALETTE = ["#000000", "#2a0020", "#8c0f60", "#e8227a", "#ff85b3"];
 const DEFAULT_LIGHT_PALETTE = ["#ffffff", "#FD96E5", "#F36AC3", "#FE4396", "#ff85b3"];
 const DEFAULT_DIM_PALETTE = ["#0c1222", "#1e1b4b", "#4338ca", "#818cf8", "#c7d2fe"];
 
 function writePaletteData(data: Uint8Array, stops: string[]) {
-  const arr = stops.length === 1 ? [stops[0], stops[0]] : stops;
+  const first = stops[0] ?? "#ffffff";
+  const arr = stops.length === 1 ? [first, first] : stops;
   for (let i = 0; i < arr.length; i++) {
-    const c = new THREE.Color(arr[i]);
+    const stopColor = arr[i];
+    if (!stopColor) continue;
+    const c = new THREE.Color(stopColor);
     data[i * 4] = Math.round(c.r * 255);
     data[i * 4 + 1] = Math.round(c.g * 255);
     data[i * 4 + 2] = Math.round(c.b * 255);
@@ -242,7 +246,8 @@ function writePaletteData(data: Uint8Array, stops: string[]) {
 }
 
 function makePaletteTexture(stops: string[]): THREE.DataTexture {
-  const arr = stops.length === 1 ? [stops[0], stops[0]] : stops;
+  const first = stops[0] ?? "#ffffff";
+  const arr = stops.length === 1 ? [first, first] : stops;
   const w = arr.length;
   const data = new Uint8Array(w * 4);
   writePaletteData(data, arr);
@@ -276,9 +281,10 @@ function makeBayerTexture(): THREE.DataTexture {
   const raw = [0, 136, 34, 170, 204, 68, 238, 102, 51, 187, 17, 153, 255, 119, 221, 85];
   const data = new Uint8Array(16 * 4);
   for (let i = 0; i < 16; i++) {
-    data[i * 4] = raw[i];
-    data[i * 4 + 1] = raw[i];
-    data[i * 4 + 2] = raw[i];
+    const val = raw[i] ?? 0;
+    data[i * 4] = val;
+    data[i * 4 + 1] = val;
+    data[i * 4 + 2] = val;
     data[i * 4 + 3] = 255;
   }
   const tex = new THREE.DataTexture(data, 4, 4, THREE.RGBAFormat);
@@ -383,6 +389,7 @@ class MouseGL {
   private _onTouch(e: TouchEvent) {
     if (e.touches.length !== 1) return;
     const t = e.touches[0];
+    if (!t) return;
     this.onInteract?.();
     this._set(t.clientX, t.clientY);
   }
@@ -517,12 +524,22 @@ interface SimOpts {
   iterations_poisson: number;
 }
 
+interface FluidFBOs {
+  vel_0: THREE.WebGLRenderTarget;
+  vel_1: THREE.WebGLRenderTarget;
+  vel_v0: THREE.WebGLRenderTarget;
+  vel_v1: THREE.WebGLRenderTarget;
+  div: THREE.WebGLRenderTarget;
+  p0: THREE.WebGLRenderTarget;
+  p1: THREE.WebGLRenderTarget;
+}
+
 class FluidSim {
   opts: SimOpts;
   fboSize = new THREE.Vector2();
   cellScale = new THREE.Vector2();
   boundarySpace = new THREE.Vector2();
-  fbos: Record<string, THREE.WebGLRenderTarget | null> = {};
+  fbos: FluidFBOs = {} as FluidFBOs;
   gl: CommonGL;
   mouse: MouseGL;
 
@@ -534,14 +551,14 @@ class FluidSim {
   };
   viscousPass!: {
     pass: ShaderPass;
-    output0: THREE.WebGLRenderTarget | null;
-    output1: THREE.WebGLRenderTarget | null;
+    output0: THREE.WebGLRenderTarget;
+    output1: THREE.WebGLRenderTarget;
   };
   divergencePass!: ShaderPass;
   poissonPass!: {
     pass: ShaderPass;
-    output0: THREE.WebGLRenderTarget | null;
-    output1: THREE.WebGLRenderTarget | null;
+    output0: THREE.WebGLRenderTarget;
+    output1: THREE.WebGLRenderTarget;
   };
   pressurePass!: ShaderPass;
 
@@ -588,8 +605,10 @@ class FluidSim {
   }
 
   private _createFBOs() {
-    for (const n of ["vel_0", "vel_1", "vel_v0", "vel_v1", "div", "p0", "p1"])
+    const names: (keyof FluidFBOs)[] = ["vel_0", "vel_1", "vel_v0", "vel_v1", "div", "p0", "p1"];
+    for (const n of names) {
       this.fbos[n] = this._makeFBO();
+    }
   }
 
   private _createPasses() {
@@ -599,7 +618,7 @@ class FluidSim {
       boundarySpace: { value: cellScale },
       px: { value: cellScale },
       fboSize: { value: fboSize },
-      velocity: { value: fbos.vel_0!.texture },
+      velocity: { value: fbos.vel_0.texture },
       dt: { value: opts.dt },
       isBFECC: { value: true },
     };
@@ -651,8 +670,8 @@ class FluidSim {
       viscous_frag,
       {
         boundarySpace: { value: cellScale },
-        velocity: { value: fbos.vel_1!.texture },
-        velocity_new: { value: fbos.vel_v0!.texture },
+        velocity: { value: fbos.vel_1.texture },
+        velocity_new: { value: fbos.vel_v0.texture },
         v: { value: opts.viscous },
         px: { value: cellScale },
         dt: { value: opts.dt },
@@ -671,7 +690,7 @@ class FluidSim {
       divergence_frag,
       {
         boundarySpace: { value: cellScale },
-        velocity: { value: fbos.vel_v0!.texture },
+        velocity: { value: fbos.vel_v0.texture },
         px: { value: cellScale },
         dt: { value: opts.dt },
       },
@@ -684,8 +703,8 @@ class FluidSim {
       poisson_frag,
       {
         boundarySpace: { value: cellScale },
-        pressure: { value: fbos.p0!.texture },
-        divergence: { value: fbos.div!.texture },
+        pressure: { value: fbos.p0.texture },
+        divergence: { value: fbos.div.texture },
         px: { value: cellScale },
       },
       fbos.p1,
@@ -698,8 +717,8 @@ class FluidSim {
       pressure_frag,
       {
         boundarySpace: { value: cellScale },
-        pressure: { value: fbos.p0!.texture },
-        velocity: { value: fbos.vel_v0!.texture },
+        pressure: { value: fbos.p0.texture },
+        velocity: { value: fbos.vel_v0.texture },
         px: { value: cellScale },
         dt: { value: opts.dt },
       },
@@ -709,7 +728,9 @@ class FluidSim {
 
   resize() {
     this._calcSize();
-    for (const k in this.fbos) this.fbos[k]!.setSize(this.fboSize.x, this.fboSize.y);
+    (Object.keys(this.fbos) as (keyof FluidFBOs)[]).forEach((k) => {
+      this.fbos[k]?.setSize(this.fboSize.x, this.fboSize.y);
+    });
   }
 
   update(time: number) {
@@ -720,7 +741,10 @@ class FluidSim {
     this.boundarySpace.copy(opts.isBounce ? new THREE.Vector2() : this.cellScale);
 
     {
-      const u = this.advection.pass.uniforms;
+      const u = this.advection.pass.uniforms as {
+        dt: { value: number };
+        isBFECC: { value: boolean };
+      };
       u.dt.value = opts.dt;
       u.isBFECC.value = opts.BFECC;
       this.advection.line.visible = opts.isBounce;
@@ -740,7 +764,11 @@ class FluidSim {
         Math.max(mouse.coords.y, -1 + cs * cy * 2 + cy * 2),
         1 - cs * cy * 2 - cy * 2,
       );
-      const u = (this.externalForce.mesh.material as THREE.RawShaderMaterial).uniforms;
+      const u = (this.externalForce.mesh.material as THREE.RawShaderMaterial).uniforms as {
+        force: { value: THREE.Vector2 };
+        center: { value: THREE.Vector2 };
+        scale: { value: THREE.Vector2 };
+      };
       u.force.value.set((mouse.diff.x / 2) * mf, (mouse.diff.y / 2) * mf);
       u.center.value.set(clampedX, clampedY);
       u.scale.value.set(cs, cs);
@@ -749,10 +777,14 @@ class FluidSim {
       r.setRenderTarget(null);
     }
 
-    let velFBO: THREE.WebGLRenderTarget | null = fbos.vel_1;
+    let velFBO: THREE.WebGLRenderTarget = fbos.vel_1;
     if (opts.isViscous) {
       const { pass, output0, output1 } = this.viscousPass;
-      const u = pass.uniforms;
+      const u = pass.uniforms as {
+        v: { value: number };
+        dt: { value: number };
+        velocity_new: { value: THREE.Texture };
+      };
       u.v.value = opts.viscous;
       u.dt.value = opts.dt;
       let fbo_in = output0,
@@ -765,7 +797,7 @@ class FluidSim {
           fbo_in = output1;
           fbo_out = output0;
         }
-        u.velocity_new.value = fbo_in!.texture;
+        u.velocity_new.value = fbo_in.texture;
         pass.render(fbo_out);
       }
       velFBO = fbo_out;
@@ -775,11 +807,14 @@ class FluidSim {
       this.divergencePass.uniforms as Uniforms & {
         velocity: { value: THREE.Texture };
       }
-    ).velocity.value = velFBO!.texture;
+    ).velocity.value = velFBO.texture;
     this.divergencePass.render();
 
     {
       const { pass, output0, output1 } = this.poissonPass;
+      const u = pass.uniforms as {
+        pressure: { value: THREE.Texture };
+      };
       let p_in = output0,
         p_out = output1;
       for (let i = 0; i < opts.iterations_poisson; i++) {
@@ -790,11 +825,15 @@ class FluidSim {
           p_in = output1;
           p_out = output0;
         }
-        pass.uniforms.pressure.value = p_in!.texture;
+        u.pressure.value = p_in.texture;
         pass.render(p_out);
       }
-      this.pressurePass.uniforms.pressure.value = p_out!.texture;
-      this.pressurePass.uniforms.velocity.value = velFBO!.texture;
+      const pu = this.pressurePass.uniforms as {
+        pressure: { value: THREE.Texture };
+        velocity: { value: THREE.Texture };
+      };
+      pu.pressure.value = p_out.texture;
+      pu.velocity.value = velFBO.texture;
     }
 
     this.pressurePass.render();
@@ -802,7 +841,9 @@ class FluidSim {
   }
 
   dispose() {
-    for (const k in this.fbos) this.fbos[k]?.dispose();
+    (Object.keys(this.fbos) as (keyof FluidFBOs)[]).forEach((k) => {
+      this.fbos[k]?.dispose();
+    });
     this.advection.pass.dispose();
     this.divergencePass.dispose();
     this.pressurePass.dispose();
@@ -857,25 +898,30 @@ export function PixelLiquidBg({
     const palette = makePaletteTexture(initialStops);
     const bayerTex = makeBayerTexture();
 
+    const isMobile = window.innerWidth < 768;
+    const effectiveCursorSize = isMobile ? Math.min(cursorSize, 70) : cursorSize;
+    const effectivePixelSize = isMobile ? Math.max(10, Math.min(pixelSize, 12)) : pixelSize;
+    const effectiveResolution = isMobile ? Math.min(resolution, 0.35) : resolution;
+
     const sim = new FluidSim(gl, mouse, {
-      resolution,
+      resolution: effectiveResolution,
       mouse_force: mouseForce,
-      cursor_size: cursorSize,
+      cursor_size: effectiveCursorSize,
       dt: 0.008,
       BFECC: false,
       isBounce: false,
       isViscous: false,
-      iterations_poisson: 8,
+      iterations_poisson: isMobile ? 6 : 8,
     });
 
     const outputUniforms: Uniforms = {
-      velocity: { value: sim.fbos.vel_0!.texture },
+      velocity: { value: sim.fbos.vel_0.texture },
       palette: { value: palette },
       uBayer: { value: bayerTex },
       bgColor: { value: getBgColor(initialMode === "dark" || initialMode === "dim") },
       uTime: { value: 0 },
       uRes: { value: new THREE.Vector2(gl.width, gl.height) },
-      uPixelSize: { value: pixelSize },
+      uPixelSize: { value: effectivePixelSize },
       boundarySpace: { value: new THREE.Vector2() },
       px: { value: new THREE.Vector2() },
     };

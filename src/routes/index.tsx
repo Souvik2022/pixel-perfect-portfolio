@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Download, Linkedin } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { Download, Linkedin, ArrowUp } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
+import { cn } from "@/lib/utils";
 
 import { TextAnimate } from "@/components/ui/text-animate";
 import { HyperText } from "@/components/ui/hyper-text";
@@ -186,6 +187,41 @@ function Portfolio() {
   const { theme } = useTheme();
   const pageRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
+  const [showMobileNav, setShowMobileNav] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>("works");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      setShowMobileNav(scrollY > 280);
+
+      const sections = ["works", "information", "experience", "contact"];
+      for (const sectionId of sections) {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 240 && rect.bottom >= 120) {
+            setActiveSection(sectionId);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     let cleanup: (() => void) | undefined;
@@ -216,24 +252,24 @@ function Portfolio() {
   }, []);
 
   return (
-    <div ref={pageRef} className="min-h-screen bg-paper text-ink">
+    <div ref={pageRef} className="min-h-screen bg-paper text-ink overflow-x-hidden">
       <div ref={loaderRef} className="fixed inset-0 z-50 bg-ink" aria-hidden="true" />
 
-      <aside className="relative z-10 flex w-full flex-col border-b border-line bg-paper p-5 md:fixed md:inset-y-0 md:left-0 md:w-72 md:border-b-0 md:border-r md:p-8">
-        <div data-reveal>
+      <aside className="relative z-10 flex w-full flex-col border-b border-line bg-paper p-5 sm:p-6 md:fixed md:inset-y-0 md:left-0 md:w-72 md:border-b-0 md:border-r md:p-8 md:overflow-y-auto md:scrollbar-none">
+        <div data-reveal className="pr-36 sm:pr-40 md:pr-0">
           <img
             src={portrait}
             alt={`Portrait of ${PORTFOLIO_DATA.name}`}
             width={512}
             height={512}
             loading="eager"
-            className="mb-5 size-16 rounded-md object-cover"
+            className="mb-4 sm:mb-5 size-14 sm:size-16 rounded-lg sm:rounded-md object-cover shadow-xs"
           />
           <TextAnimate
             animation="blurInUp"
             by="word"
             as="h1"
-            className="text-lg font-medium tracking-tight"
+            className="text-lg sm:text-xl font-medium tracking-tight"
             delay={0.2}
           >
             {PORTFOLIO_DATA.name}
@@ -242,7 +278,7 @@ function Portfolio() {
             animation="blurInUp"
             by="word"
             as="p"
-            className="mt-1 text-sm text-muted"
+            className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-muted"
             delay={0.3}
           >
             {PORTFOLIO_DATA.role}
@@ -250,14 +286,21 @@ function Portfolio() {
         </div>
 
         <nav
-          className="mt-8 grid grid-cols-2 gap-x-5 gap-y-3 text-[13px] md:mt-12 md:block md:space-y-3"
+          className="mt-6 sm:mt-8 grid grid-cols-2 gap-x-4 sm:gap-x-5 gap-y-2 sm:gap-y-3 text-[13px] md:mt-12 md:block md:space-y-3"
           aria-label="Primary navigation"
           data-reveal
         >
           <span className="hidden text-[10px] font-semibold uppercase tracking-[0.2em] text-muted md:block md:mb-5">
             Index
           </span>
-          <a href="#works" className="group block text-ink transition-colors hover:text-vermillion">
+          <a
+            href="#works"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollTo("works");
+            }}
+            className="group block py-1 sm:py-0 text-ink transition-colors hover:text-vermillion"
+          >
             <HyperText
               as="span"
               duration={450}
@@ -269,7 +312,11 @@ function Portfolio() {
           </a>
           <a
             href="#information"
-            className="group block text-ink transition-colors hover:text-vermillion"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollTo("information");
+            }}
+            className="group block py-1 sm:py-0 text-ink transition-colors hover:text-vermillion"
           >
             <HyperText
               as="span"
@@ -282,7 +329,11 @@ function Portfolio() {
           </a>
           <a
             href="#experience"
-            className="group block text-ink transition-colors hover:text-vermillion"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollTo("experience");
+            }}
+            className="group block py-1 sm:py-0 text-ink transition-colors hover:text-vermillion"
           >
             <HyperText
               as="span"
@@ -295,7 +346,11 @@ function Portfolio() {
           </a>
           <a
             href="#contact"
-            className="group block text-ink transition-colors hover:text-vermillion"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollTo("contact");
+            }}
+            className="group block py-1 sm:py-0 text-ink transition-colors hover:text-vermillion"
           >
             <HyperText
               as="span"
@@ -309,7 +364,7 @@ function Portfolio() {
         </nav>
 
         <div
-          className="mt-8 grid grid-cols-2 gap-5 border-t border-line pt-5 text-xs md:mt-auto md:block md:space-y-6 md:border-t-0 md:pt-0"
+          className="mt-6 sm:mt-8 grid grid-cols-2 gap-3 sm:gap-5 border-t border-line pt-4 sm:pt-5 text-xs md:mt-auto md:block md:space-y-6 md:border-t-0 md:pt-0"
           data-reveal
         >
           <div className="space-y-1">
@@ -329,10 +384,10 @@ function Portfolio() {
           </div>
         </div>
 
-        <div className="mt-7 md:mt-8" data-reveal>
+        <div className="mt-6 sm:mt-7 md:mt-8 w-full max-w-sm sm:max-w-none" data-reveal>
           <LiquidMetalButton
             label="Inquire"
-            width={224}
+            fullWidth
             textColor="#ffffff"
             onClick={() => {
               window.location.href = `mailto:${PORTFOLIO_DATA.email}`;
@@ -340,13 +395,13 @@ function Portfolio() {
           />
         </div>
 
-        <div className="mt-4 flex items-center gap-4 text-muted" data-reveal>
+        <div className="mt-4 sm:mt-5 flex items-center gap-4 sm:gap-5 text-muted" data-reveal>
           <a
             href={PORTFOLIO_DATA.behance}
             target="_blank"
             rel="noreferrer"
             aria-label="Behance"
-            className="transition-colors hover:text-vermillion"
+            className="min-h-[40px] flex items-center transition-colors hover:text-vermillion text-xs"
           >
             Be
           </a>
@@ -355,25 +410,83 @@ function Portfolio() {
             target="_blank"
             rel="noreferrer"
             aria-label="LinkedIn"
-            className="transition-colors hover:text-vermillion"
+            className="min-h-[40px] flex items-center transition-colors hover:text-vermillion"
           >
-            <Linkedin size={14} strokeWidth={1.5} />
+            <Linkedin size={15} strokeWidth={1.5} />
           </a>
           <a
             href={PORTFOLIO_DATA.cv}
             target="_blank"
             rel="noreferrer"
-            className="ml-auto flex items-center gap-1.5 text-[11px] transition-colors hover:text-vermillion"
+            className="ml-auto min-h-[40px] flex items-center gap-1.5 text-xs transition-colors hover:text-vermillion"
             aria-label="Download CV"
           >
-            <Download size={13} strokeWidth={1.5} /> CV
+            <Download size={14} strokeWidth={1.5} /> CV
           </a>
         </div>
       </aside>
 
-      <main className="md:ml-72">
+      {/* Mobile Floating Quick Navigation Bar */}
+      <motion.nav
+        aria-label="Mobile quick navigation"
+        className="fixed bottom-4 inset-x-3 z-40 mx-auto max-w-sm md:hidden"
+        initial={{ y: 60, opacity: 0 }}
+        animate={{
+          y: showMobileNav ? 0 : 60,
+          opacity: showMobileNav ? 1 : 0,
+          pointerEvents: showMobileNav ? "auto" : "none",
+        }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+      >
+        <div className="flex items-center justify-between gap-1 rounded-full border border-line/80 bg-paper/90 px-2 py-1.5 shadow-xl backdrop-blur-md dark:bg-surface/90">
+          <div className="flex items-center gap-0.5">
+            {[
+              { id: "works", label: "Works" },
+              { id: "information", label: "Info" },
+              { id: "experience", label: "Exp" },
+              { id: "contact", label: "Contact" },
+            ].map((tab) => {
+              const isActive = activeSection === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => scrollTo(tab.id)}
+                  className={cn(
+                    "rounded-full px-2.5 sm:px-3 py-1.5 text-xs font-medium transition-all",
+                    isActive
+                      ? "bg-vermillion text-white shadow-xs"
+                      : "text-muted hover:text-ink active:scale-95",
+                  )}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="flex items-center gap-1 pl-1 border-l border-line/60">
+            <button
+              onClick={() => {
+                window.location.href = `mailto:${PORTFOLIO_DATA.email}`;
+              }}
+              className="rounded-full bg-ink px-2.5 sm:px-3 py-1.5 text-xs font-medium text-paper transition-all hover:bg-vermillion hover:text-white active:scale-95"
+            >
+              Inquire
+            </button>
+            <button
+              onClick={scrollToTop}
+              aria-label="Scroll to top"
+              className="flex size-7 items-center justify-center rounded-full text-muted transition-colors hover:text-ink active:scale-90"
+            >
+              <ArrowUp size={14} />
+            </button>
+          </div>
+        </div>
+      </motion.nav>
+
+      <main className="md:ml-72 w-full min-w-0 overflow-x-hidden">
         <section
-          className="relative overflow-hidden border-b border-line px-5 pb-16 pt-16 md:px-12 md:pb-20 md:pt-24 lg:px-16 lg:pt-28"
+          className="relative overflow-hidden border-b border-line px-5 py-12 sm:px-8 sm:py-16 md:px-12 md:pb-20 md:pt-24 lg:px-16 lg:pt-28"
           data-reveal
         >
           <PixelLiquidBg
@@ -381,7 +494,7 @@ function Portfolio() {
             pixelSize={14}
             resolution={0.4}
             mouseForce={9}
-            cursorSize={120}
+            cursorSize={110}
             autoDemo={true}
           />
           <div className="relative z-10 max-w-[56ch]">
@@ -389,7 +502,7 @@ function Portfolio() {
               animation="fadeIn"
               by="character"
               as="p"
-              className="mb-6 font-mono text-[10px] uppercase tracking-[0.2em] text-vermillion"
+              className="mb-4 sm:mb-6 font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-vermillion"
               delay={0.15}
             >
               Design journey / 2026
@@ -398,7 +511,7 @@ function Portfolio() {
               animation="blurInUp"
               by="word"
               as="h2"
-              className="font-serif text-4xl italic leading-[1.02] sm:text-5xl lg:text-6xl"
+              className="font-serif text-3xl italic leading-[1.04] sm:text-5xl lg:text-6xl tracking-tight break-words"
               delay={0.25}
               duration={0.8}
             >
@@ -408,7 +521,7 @@ function Portfolio() {
               animation="blurInUp"
               by="word"
               as="p"
-              className="mt-8 max-w-[46ch] text-base leading-relaxed text-muted"
+              className="mt-6 sm:mt-8 max-w-[46ch] text-sm sm:text-base leading-relaxed text-muted"
               delay={0.45}
               duration={0.7}
             >
@@ -417,8 +530,14 @@ function Portfolio() {
           </div>
         </section>
 
-        <section id="works" className="scroll-mt-8 px-5 py-16 md:px-12 md:py-20 lg:px-16 lg:py-24">
-          <div className="mb-14 flex items-end justify-between gap-6" data-reveal>
+        <section
+          id="works"
+          className="scroll-mt-16 md:scroll-mt-8 px-5 py-12 sm:px-8 sm:py-16 md:px-12 md:py-20 lg:px-16 lg:py-24"
+        >
+          <div
+            className="mb-8 sm:mb-12 md:mb-14 flex items-end justify-between gap-4 sm:gap-6"
+            data-reveal
+          >
             <TextAnimate
               animation="blurInUp"
               by="word"
@@ -437,12 +556,12 @@ function Portfolio() {
             </TextAnimate>
           </div>
 
-          <div className="grid grid-cols-1 gap-x-6 gap-y-12 md:grid-cols-2 lg:gap-x-8 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:gap-8 xl:grid-cols-3">
             {PORTFOLIO_DATA.projects.map((project, index) => (
               <article key={project.number} className="min-w-0" data-reveal>
                 <CardContainer className="w-full">
-                  <CardBody className="group/card relative w-full rounded-2xl border border-line/60 bg-surface/50 p-4 transition-all duration-300 hover:border-line hover:bg-surface/80 hover:shadow-2xl dark:border-white/10 dark:bg-white/[0.02] dark:hover:border-white/20 dark:hover:bg-white/[0.04]">
-                    <CardItem translateZ={50} className="w-full">
+                  <CardBody className="group/card relative w-full rounded-xl sm:rounded-2xl border border-line/60 bg-surface/50 p-3.5 sm:p-4 transition-all duration-300 hover:border-line hover:bg-surface/80 hover:shadow-xl dark:border-white/10 dark:bg-white/[0.02] dark:hover:border-white/20 dark:hover:bg-white/[0.04]">
+                    <CardItem translateZ={40} className="w-full">
                       <a
                         href={project.href}
                         target="_blank"
@@ -450,40 +569,33 @@ function Portfolio() {
                         className="block"
                         aria-label={`View ${project.title} on Behance`}
                       >
-                        <div className="mb-5 overflow-hidden rounded-xl bg-surface shadow-sm" data-line>
+                        <div
+                          className="mb-4 sm:mb-5 overflow-hidden rounded-lg sm:rounded-xl bg-surface shadow-xs"
+                          data-line
+                        >
                           <img
                             src={project.image}
                             alt={`${project.title} project artwork`}
                             width={900}
                             height={1080}
                             loading="lazy"
+                            decoding="async"
                             className="aspect-[5/6] w-full object-cover transition duration-700 ease-out group-hover/card:scale-[1.03]"
                           />
                         </div>
                       </a>
                     </CardItem>
-                    <div className="flex items-start justify-between gap-4 pt-1">
-                      <div className="max-w-[36ch]">
-                        <CardItem translateZ={40} className="block">
-                          <TextAnimate
-                            animation="blurInUp"
-                            by="word"
-                            as="h4"
-                            className="font-serif text-xl italic"
-                            delay={0.05}
-                          >
-                            {project.title}
-                          </TextAnimate>
-                        </CardItem>
+                    <div className="flex items-start justify-between gap-3 sm:gap-4 pt-1">
+                      <div className="min-w-0 max-w-[36ch]">
                         <CardItem translateZ={30} className="block">
                           <TextAnimate
                             animation="blurInUp"
                             by="word"
-                            as="p"
-                            className="mt-2 text-[13px] leading-relaxed text-muted"
-                            delay={0.1}
+                            as="h4"
+                            className="font-serif text-lg sm:text-xl italic leading-snug"
+                            delay={0.05}
                           >
-                            {project.description}
+                            {project.title}
                           </TextAnimate>
                         </CardItem>
                         <CardItem translateZ={25} className="block">
@@ -491,7 +603,18 @@ function Portfolio() {
                             animation="blurInUp"
                             by="word"
                             as="p"
-                            className="mt-3 font-mono text-[10px] uppercase tracking-wider text-muted"
+                            className="mt-1.5 sm:mt-2 text-xs sm:text-[13px] leading-relaxed text-muted line-clamp-3 sm:line-clamp-none"
+                            delay={0.1}
+                          >
+                            {project.description}
+                          </TextAnimate>
+                        </CardItem>
+                        <CardItem translateZ={20} className="block">
+                          <TextAnimate
+                            animation="blurInUp"
+                            by="word"
+                            as="p"
+                            className="mt-2.5 sm:mt-3 font-mono text-[9px] sm:text-[10px] uppercase tracking-wider text-muted"
                             delay={0.15}
                           >
                             {project.category}
@@ -499,17 +622,21 @@ function Portfolio() {
                         </CardItem>
                       </div>
                       <div className="flex shrink-0 flex-col items-end gap-2">
-                        <CardItem translateZ={25} as="span" className="font-mono text-[10px] text-muted">
+                        <CardItem
+                          translateZ={20}
+                          as="span"
+                          className="font-mono text-[10px] text-muted"
+                        >
                           [ {String(index + 1).padStart(2, "0")} ]
                         </CardItem>
-                        <CardItem translateZ={35}>
+                        <CardItem translateZ={30}>
                           <a
                             href={project.href}
                             target="_blank"
                             rel="noreferrer"
-                            className="border-b border-ink pb-0.5 text-xs transition-colors hover:border-vermillion hover:text-vermillion"
+                            className="inline-flex items-center min-h-[38px] px-2.5 py-1 -mr-1.5 rounded-md text-xs font-medium border-b border-ink/40 sm:border-ink hover:border-vermillion hover:text-vermillion active:bg-surface/80 transition-colors"
                           >
-                            Behance
+                            Behance ↗
                           </a>
                         </CardItem>
                       </div>
@@ -523,9 +650,9 @@ function Portfolio() {
 
         <section
           id="information"
-          className="scroll-mt-8 border-t border-line px-5 py-16 md:px-12 md:py-24 lg:px-16"
+          className="scroll-mt-16 md:scroll-mt-8 border-t border-line px-5 py-12 sm:px-8 sm:py-16 md:px-12 md:py-24 lg:px-16"
         >
-          <div className="grid gap-10 lg:grid-cols-[minmax(120px,0.42fr)_minmax(0,2.58fr)] lg:gap-14">
+          <div className="grid gap-8 sm:gap-10 lg:grid-cols-[minmax(120px,0.42fr)_minmax(0,2.58fr)] lg:gap-14">
             <TextAnimate
               animation="blurInUp"
               by="word"
@@ -539,38 +666,38 @@ function Portfolio() {
                 animation="blurInUp"
                 by="word"
                 as="p"
-                className="font-serif text-2xl italic leading-tight md:text-[28px]"
+                className="font-serif text-xl sm:text-2xl italic leading-tight md:text-[28px]"
                 delay={0.1}
                 duration={0.7}
               >
                 Good ideas deserve the right tools, skills, and perspective.
               </TextAnimate>
               <motion.div
-                className="mt-8 h-px w-full bg-line md:mt-10"
+                className="mt-6 sm:mt-8 h-px w-full bg-line md:mt-10"
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true, margin: "0px 0px -40px 0px" }}
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 style={{ transformOrigin: "left" }}
               />
-              <div className="mt-9 grid gap-12 md:grid-cols-2 md:gap-10 lg:gap-14">
+              <div className="mt-8 sm:mt-9 grid gap-10 md:grid-cols-2 md:gap-10 lg:gap-14">
                 <div>
                   <TextAnimate
                     animation="blurInUp"
                     by="word"
                     as="p"
-                    className="mb-6 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted"
+                    className="mb-5 sm:mb-6 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted"
                   >
                     Tools & software
                   </TextAnimate>
-                  <ul className="space-y-3.5">
+                  <ul className="space-y-3 sm:space-y-3.5">
                     {(PORTFOLIO_DATA.expertise?.tools ?? []).map((tool, index) => (
                       <li
                         key={tool.name}
-                        className="grid grid-cols-[24px_minmax(0,1fr)] items-center gap-3 text-[13px]"
+                        className="grid grid-cols-[24px_minmax(0,1fr)] items-center gap-3 text-xs sm:text-[13px]"
                       >
                         <motion.span
-                          className="flex size-6 items-center justify-center"
+                          className="flex size-6 items-center justify-center shrink-0"
                           aria-hidden="true"
                           initial={{ opacity: 0, scale: 0.8 }}
                           whileInView={{ opacity: 1, scale: 1 }}
@@ -583,6 +710,7 @@ function Portfolio() {
                             width={24}
                             height={24}
                             loading="lazy"
+                            decoding="async"
                             className="size-6 object-contain"
                           />
                         </motion.span>
@@ -601,7 +729,7 @@ function Portfolio() {
                             animation="blurInUp"
                             by="word"
                             as="span"
-                            className="mt-0.5 block text-xs leading-relaxed text-muted"
+                            className="mt-0.5 block text-[11px] sm:text-xs leading-relaxed text-muted"
                             delay={Math.min(index * 0.02 + 0.03, 0.28)}
                             duration={0.35}
                           >
@@ -612,18 +740,18 @@ function Portfolio() {
                     ))}
                   </ul>
                 </div>
-                <div className="border-t border-line pt-9 md:border-l md:border-t-0 md:pl-10 md:pt-0 lg:pl-14">
+                <div className="border-t border-line pt-8 sm:pt-9 md:border-l md:border-t-0 md:pl-10 md:pt-0 lg:pl-14">
                   <TextAnimate
                     animation="blurInUp"
                     by="word"
                     as="p"
-                    className="mb-6 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted"
+                    className="mb-5 sm:mb-6 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted"
                   >
                     Skills
                   </TextAnimate>
-                  <ul className="space-y-3.5">
+                  <ul className="space-y-3 sm:space-y-3.5">
                     {(PORTFOLIO_DATA.expertise?.skills ?? []).map((skill, index) => (
-                      <li key={skill.name} className="text-[13px]">
+                      <li key={skill.name} className="text-xs sm:text-[13px]">
                         <TextAnimate
                           animation="blurInUp"
                           by="word"
@@ -638,7 +766,7 @@ function Portfolio() {
                           animation="blurInUp"
                           by="word"
                           as="span"
-                          className="mt-0.5 block text-xs leading-relaxed text-muted"
+                          className="mt-0.5 block text-[11px] sm:text-xs leading-relaxed text-muted"
                           delay={Math.min(index * 0.02 + 0.03, 0.28)}
                           duration={0.35}
                         >
@@ -655,9 +783,9 @@ function Portfolio() {
 
         <section
           id="experience"
-          className="scroll-mt-8 border-t border-line px-5 py-16 md:px-12 md:py-24 lg:px-16"
+          className="scroll-mt-16 md:scroll-mt-8 border-t border-line px-5 py-12 sm:px-8 sm:py-16 md:px-12 md:py-24 lg:px-16"
         >
-          <div className="grid gap-14 md:grid-cols-12 md:gap-8">
+          <div className="grid gap-8 sm:gap-10 md:grid-cols-12 md:gap-8">
             <div className="md:col-span-4">
               <TextAnimate
                 animation="blurInUp"
@@ -668,16 +796,16 @@ function Portfolio() {
                 Selected experience
               </TextAnimate>
             </div>
-            <div className="space-y-14 md:col-span-8">
+            <div className="space-y-10 sm:space-y-14 md:col-span-8">
               {PORTFOLIO_DATA.experience.map((item, index) => (
                 <div key={item.studio}>
-                  <div className="grid gap-2 sm:flex sm:items-baseline sm:justify-between">
+                  <div className="grid gap-1.5 sm:flex sm:items-baseline sm:justify-between">
                     <div>
                       <TextAnimate
                         animation="blurInUp"
                         by="word"
                         as="h4"
-                        className="text-lg font-medium"
+                        className="text-base sm:text-lg font-medium"
                         delay={index * 0.06}
                       >
                         {item.studio}
@@ -686,7 +814,7 @@ function Portfolio() {
                         animation="blurInUp"
                         by="word"
                         as="p"
-                        className="mt-1 text-sm text-muted"
+                        className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-muted"
                         delay={index * 0.06 + 0.03}
                       >
                         {item.role}
@@ -696,7 +824,7 @@ function Portfolio() {
                       animation="blurInUp"
                       by="word"
                       as="span"
-                      className="font-mono text-[10px] text-muted"
+                      className="font-mono text-[10px] text-muted sm:text-right"
                       delay={index * 0.06 + 0.03}
                     >
                       {item.years}
@@ -706,14 +834,14 @@ function Portfolio() {
                     animation="blurInUp"
                     by="word"
                     as="p"
-                    className="mt-4 max-w-[48ch] text-sm leading-relaxed text-muted"
+                    className="mt-3 sm:mt-4 max-w-[48ch] text-xs sm:text-sm leading-relaxed text-muted"
                     delay={index * 0.06 + 0.06}
                   >
                     {item.detail}
                   </TextAnimate>
                 </div>
               ))}
-              <div className="border-t border-line pt-12">
+              <div className="border-t border-line pt-8 sm:pt-12">
                 <LogoCloudBlock title="Selected clients" />
               </div>
             </div>
@@ -722,19 +850,19 @@ function Portfolio() {
 
         <footer
           id="contact"
-          className="scroll-mt-8 flex flex-col gap-8 border-t border-line px-5 py-10 text-[10px] uppercase tracking-widest text-muted sm:flex-row sm:items-center sm:justify-between md:px-12 lg:px-16"
+          className="scroll-mt-16 md:scroll-mt-8 flex flex-col gap-6 sm:gap-8 border-t border-line px-5 py-8 sm:py-10 pb-24 md:pb-10 text-[10px] uppercase tracking-widest text-muted sm:flex-row sm:items-center sm:justify-between md:px-12 lg:px-16"
           data-reveal
         >
-          <div className="flex flex-wrap gap-x-8 gap-y-2">
+          <div className="flex flex-wrap gap-x-6 sm:gap-x-8 gap-y-2">
             <span>© 2026 {PORTFOLIO_DATA.name}</span>
             <span>Available globally</span>
           </div>
-          <div className="flex gap-7 font-medium">
+          <div className="flex flex-wrap items-center gap-5 sm:gap-7 font-medium">
             <a
               href={PORTFOLIO_DATA.behance}
               target="_blank"
               rel="noreferrer"
-              className="transition-colors hover:text-vermillion"
+              className="min-h-[40px] flex items-center transition-colors hover:text-vermillion"
             >
               Behance
             </a>
@@ -742,7 +870,7 @@ function Portfolio() {
               href={PORTFOLIO_DATA.linkedin}
               target="_blank"
               rel="noreferrer"
-              className="transition-colors hover:text-vermillion"
+              className="min-h-[40px] flex items-center transition-colors hover:text-vermillion"
             >
               LinkedIn
             </a>
@@ -750,7 +878,7 @@ function Portfolio() {
               href={PORTFOLIO_DATA.cv}
               target="_blank"
               rel="noreferrer"
-              className="transition-colors hover:text-vermillion"
+              className="min-h-[40px] flex items-center transition-colors hover:text-vermillion"
             >
               Download CV
             </a>

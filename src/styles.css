@@ -112,18 +112,30 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    -webkit-tap-highlight-color: transparent;
     transition:
       background-color 200ms ease,
       color 200ms ease;
   }
 
+  @media (max-width: 767px) {
+    html {
+      scroll-padding-top: 4.25rem;
+    }
+  }
+
   body {
     min-width: 320px;
+    width: 100%;
+    overflow-x: hidden;
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     font-synthesis: none;
     text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     transition:
       background-color 200ms ease,
       color 200ms ease;

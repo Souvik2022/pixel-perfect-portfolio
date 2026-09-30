@@ -1,4 +1,11 @@
-import { useEffect, useRef, useState, type ComponentType, type RefAttributes } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ComponentType,
+  type RefAttributes,
+} from "react";
 import {
   AnimatePresence,
   motion,
@@ -90,18 +97,21 @@ export function HyperText({
     }
   };
 
-  const getScrambleChar = (original: string) => {
-    if (original === " ") return " ";
-    const char = characterSet[getRandomInt(characterSet.length)];
-    if (preserveCase) {
-      return original === original.toLowerCase() ? char.toLowerCase() : char.toUpperCase();
-    }
-    return char;
-  };
+  const getScrambleChar = useCallback(
+    (original: string) => {
+      if (original === " ") return " ";
+      const char = characterSet[getRandomInt(characterSet.length)] ?? " ";
+      if (preserveCase) {
+        return original === original.toLowerCase() ? char.toLowerCase() : char.toUpperCase();
+      }
+      return char;
+    },
+    [characterSet, preserveCase],
+  );
 
   // Handle animation start based on view or delay
   useEffect(() => {
-    if (!animateOnMount && !startOnView) return;
+    if (!animateOnMount && !startOnView) return undefined;
 
     if (!startOnView && animateOnMount) {
       const startTimeout = setTimeout(() => {
@@ -113,7 +123,7 @@ export function HyperText({
     if (startOnView) {
       const observer = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) {
+          if (entry?.isIntersecting) {
             setTimeout(() => {
               setIsAnimating(true);
             }, delay);
@@ -129,6 +139,8 @@ export function HyperText({
 
       return () => observer.disconnect();
     }
+
+    return undefined;
   }, [delay, startOnView, animateOnMount]);
 
   // Handle scramble animation
@@ -152,7 +164,7 @@ export function HyperText({
               letter === " "
                 ? " "
                 : index <= iterationCount.current
-                  ? children[index]
+                  ? (children[index] ?? letter)
                   : getScrambleChar(letter),
             ),
         );
@@ -172,7 +184,7 @@ export function HyperText({
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [children, duration, isAnimating, characterSet, preserveCase]);
+  }, [children, duration, isAnimating, getScrambleChar]);
 
   return (
     <MotionComponent

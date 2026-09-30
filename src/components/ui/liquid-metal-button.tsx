@@ -12,6 +12,7 @@ interface LiquidMetalButtonProps {
   className?: string;
   width?: number;
   textColor?: string;
+  fullWidth?: boolean;
 }
 
 interface ShaderMountInstance {
@@ -26,6 +27,7 @@ export function LiquidMetalButton({
   className = "",
   width,
   textColor = "#ffffff",
+  fullWidth = false,
 }: LiquidMetalButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
@@ -33,7 +35,23 @@ export function LiquidMetalButton({
   const shaderRef = useRef<HTMLDivElement>(null);
   const shaderMount = useRef<ShaderMountInstance | null>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [measuredWidth, setMeasuredWidth] = useState<number | null>(null);
   const rippleId = useRef(0);
+
+  useEffect(() => {
+    if (!fullWidth || !wrapperRef.current) return;
+    const update = () => {
+      if (wrapperRef.current) {
+        const w = wrapperRef.current.clientWidth;
+        if (w > 0) setMeasuredWidth(w);
+      }
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(wrapperRef.current);
+    return () => ro.disconnect();
+  }, [fullWidth]);
 
   const dimensions = useMemo(() => {
     if (viewMode === "icon") {
@@ -46,17 +64,17 @@ export function LiquidMetalButton({
         shaderHeight: 46,
       };
     } else {
-      const btnWidth = width ?? 200;
+      const btnWidth = fullWidth && measuredWidth ? measuredWidth : (width ?? 200);
       return {
         width: btnWidth,
         height: 46,
-        innerWidth: btnWidth - 4,
+        innerWidth: Math.max(btnWidth - 4, 30),
         innerHeight: 42,
         shaderWidth: btnWidth,
         shaderHeight: 46,
       };
     }
-  }, [viewMode, width]);
+  }, [viewMode, width, fullWidth, measuredWidth]);
 
   useEffect(() => {
     const styleId = "shader-canvas-style-exploded";
@@ -168,11 +186,17 @@ export function LiquidMetalButton({
   };
 
   return (
-    <div className={`relative inline-block ${className}`}>
+    <div
+      ref={wrapperRef}
+      className={`relative ${fullWidth ? "w-full flex justify-center" : "inline-block"} ${className}`}
+    >
       <div
         style={{
           perspective: "1000px",
           perspectiveOrigin: "50% 50%",
+          width: fullWidth ? "100%" : undefined,
+          display: fullWidth ? "flex" : undefined,
+          justifyContent: fullWidth ? "center" : undefined,
         }}
       >
         <div

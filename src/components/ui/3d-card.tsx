@@ -1,11 +1,5 @@
 import { cn } from "@/lib/utils";
-import React, {
-  createContext,
-  useState,
-  useContext,
-  useRef,
-  useEffect,
-} from "react";
+import React, { createContext, useState, useContext, useRef, useEffect } from "react";
 
 const MouseEnterContext = createContext<
   [boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined
@@ -22,17 +16,29 @@ export const CardContainer = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMouseEntered, setIsMouseEntered] = useState(false);
+  const [canHover, setCanHover] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+      setCanHover(mq.matches);
+      const handler = (e: MediaQueryListEvent) => setCanHover(e.matches);
+      mq.addEventListener("change", handler);
+      return () => mq.removeEventListener("change", handler);
+    }
+    return undefined;
+  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return;
-    const { left, top, width, height } =
-      containerRef.current.getBoundingClientRect();
+    if (!canHover || !containerRef.current) return;
+    const { left, top, width, height } = containerRef.current.getBoundingClientRect();
     const x = (e.clientX - left - width / 2) / 18;
     const y = (e.clientY - top - height / 2) / 18;
     containerRef.current.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
   };
 
   const handleMouseEnter = () => {
+    if (!canHover) return;
     setIsMouseEntered(true);
   };
 
@@ -47,7 +53,7 @@ export const CardContainer = ({
       <div
         className={cn("w-full flex items-center justify-center", containerClassName)}
         style={{
-          perspective: "1000px",
+          perspective: canHover ? "1000px" : undefined,
         }}
       >
         <div
@@ -55,12 +61,9 @@ export const CardContainer = ({
           onMouseEnter={handleMouseEnter}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          className={cn(
-            "w-full relative transition-transform duration-200 ease-out",
-            className
-          )}
+          className={cn("w-full relative transition-transform duration-200 ease-out", className)}
           style={{
-            transformStyle: "preserve-3d",
+            transformStyle: canHover ? "preserve-3d" : "flat",
           }}
         >
           {children}
@@ -80,8 +83,8 @@ export const CardBody = ({
   return (
     <div
       className={cn(
-        "w-full [transform-style:preserve-3d] [&>*]:[transform-style:preserve-3d]",
-        className
+        "w-full [@media(hover:hover)]:[transform-style:preserve-3d] [&>*]:[@media(hover:hover)]:[transform-style:preserve-3d]",
+        className,
       )}
     >
       {children}
@@ -139,7 +142,7 @@ export function CardItem<T extends React.ElementType = "div">({
   | "rotateZ"
 >) {
   const Tag = as || "div";
-  const ref = useRef<any>(null);
+  const ref = useRef<HTMLElement | null>(null);
   const [isMouseEntered] = useMouseEnter();
 
   useEffect(() => {
@@ -153,7 +156,8 @@ export function CardItem<T extends React.ElementType = "div">({
 
   return (
     <Tag
-      ref={ref}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ref={ref as React.Ref<any>}
       className={cn("transition-transform duration-200 ease-out", className)}
       {...rest}
     >
