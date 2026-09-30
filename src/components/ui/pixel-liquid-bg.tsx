@@ -307,25 +307,36 @@ class CommonGL {
   delta = 0;
   container: HTMLElement | null = null;
 
-  init(container: HTMLElement) {
+  init(container: HTMLElement): boolean {
     this.container = container;
     this.pixelRatio = 1;
     this.resize();
-    this.renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
-    this.renderer.autoClear = false;
-    this.renderer.setClearColor(0x000000, 0);
-    this.renderer.setPixelRatio(this.pixelRatio);
-    this.renderer.setSize(this.width, this.height, false);
-    const el = this.renderer.domElement;
-    el.style.width = "100%";
-    el.style.height = "100%";
-    el.style.display = "block";
-    el.style.position = "absolute";
-    el.style.top = "0";
-    el.style.left = "0";
-    el.style.pointerEvents = "none";
-    this.clock = new THREE.Clock();
-    this.clock.start();
+    try {
+      this.renderer = new THREE.WebGLRenderer({
+        antialias: false,
+        alpha: true,
+        failIfMajorPerformanceCaveat: false,
+      });
+      this.renderer.autoClear = false;
+      this.renderer.setClearColor(0x000000, 0);
+      this.renderer.setPixelRatio(this.pixelRatio);
+      this.renderer.setSize(this.width, this.height, false);
+      const el = this.renderer.domElement;
+      el.style.width = "100%";
+      el.style.height = "100%";
+      el.style.display = "block";
+      el.style.position = "absolute";
+      el.style.top = "0";
+      el.style.left = "0";
+      el.style.pointerEvents = "none";
+      this.clock = new THREE.Clock();
+      this.clock.start();
+      return true;
+    } catch (e) {
+      console.warn("Could not initialize WebGLRenderer:", e);
+      this.renderer = null;
+      return false;
+    }
   }
 
   resize() {
@@ -884,108 +895,146 @@ export function PixelLiquidBg({
     const container = mountRef.current;
     if (!container) return;
 
-    const gl = new CommonGL();
-    gl.init(container);
-    container.prepend(gl.renderer!.domElement);
-
-    const mouse = new MouseGL();
-    mouse.init(container);
-    mouse.autoIntensity = 2.4;
-
-    const initialMode = getThemeMode();
-    const initialStops =
-      initialMode === "dim" ? dimPalette : initialMode === "dark" ? darkPalette : lightPalette;
-    const palette = makePaletteTexture(initialStops);
-    const bayerTex = makeBayerTexture();
-
-    const isMobile = window.innerWidth < 768;
-    const effectiveCursorSize = isMobile ? Math.min(cursorSize, 70) : cursorSize;
-    const effectivePixelSize = isMobile ? Math.max(10, Math.min(pixelSize, 12)) : pixelSize;
-    const effectiveResolution = isMobile ? Math.min(resolution, 0.35) : resolution;
-
-    const sim = new FluidSim(gl, mouse, {
-      resolution: effectiveResolution,
-      mouse_force: mouseForce,
-      cursor_size: effectiveCursorSize,
-      dt: 0.008,
-      BFECC: false,
-      isBounce: false,
-      isViscous: false,
-      iterations_poisson: isMobile ? 6 : 8,
-    });
-
-    const outputUniforms: Uniforms = {
-      velocity: { value: sim.fbos.vel_0.texture },
-      palette: { value: palette },
-      uBayer: { value: bayerTex },
-      bgColor: { value: getBgColor(initialMode === "dark" || initialMode === "dim") },
-      uTime: { value: 0 },
-      uRes: { value: new THREE.Vector2(gl.width, gl.height) },
-      uPixelSize: { value: effectivePixelSize },
-      boundarySpace: { value: new THREE.Vector2() },
-      px: { value: new THREE.Vector2() },
-    };
-    const outputScene = new THREE.Scene();
-    const outputCam = new THREE.Camera();
-    const outputMesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(2, 2),
-      new THREE.RawShaderMaterial({
-        vertexShader: face_vert,
-        fragmentShader: color_frag,
-        transparent: true,
-        depthWrite: false,
-        uniforms: outputUniforms,
-      }),
-    );
-    outputScene.add(outputMesh);
-
-    const updateThemeColors = () => {
-      const mode = getThemeMode();
-      const stops = mode === "dim" ? dimPalette : mode === "dark" ? darkPalette : lightPalette;
-      writePaletteData(palette.image.data as Uint8Array, stops);
-      palette.needsUpdate = true;
-      const bg = getBgColor(mode === "dark" || mode === "dim");
-      (outputUniforms.bgColor.value as THREE.Vector4).set(bg.x, bg.y, bg.z, bg.w);
-    };
-
-    const themeObserver = new MutationObserver(updateThemeColors);
-    themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class", "data-theme"],
-    });
-
-    let lastInteraction = performance.now();
-    mouse.onInteract = () => {
-      lastInteraction = performance.now();
-    };
-    const driver = autoDemo ? new AutoDriver(mouse, () => lastInteraction, 0.45, 1200) : null;
-
-    const handleResize = () => {
-      gl.resize();
-      sim.resize();
-      (outputUniforms.uRes.value as THREE.Vector2).set(gl.width, gl.height);
-    };
-    const ro = new ResizeObserver(handleResize);
-    ro.observe(container);
-
-    let raf = 0;
-    let running = true;
-
-    const loop = () => {
-      if (!running) return;
-      raf = requestAnimationFrame(loop);
-      driver?.update();
-      mouse.update();
-      gl.update();
-      outputUniforms.uTime.value = gl.time;
-      sim.update(gl.time);
-      const r = gl.renderer;
-      if (r) {
-        r.setRenderTarget(null);
-        r.render(outputScene, outputCam);
+    // Check if WebGL is supported
+    try {
+      const testCanvas = document.createElement("canvas");
+      const testGl =
+        testCanvas.getContext("webgl2") ||
+        testCanvas.getContext("webgl") ||
+        testCanvas.getContext("experimental-webgl");
+      if (!testGl) {
+        console.warn("WebGL not supported or disabled, skipping liquid background.");
+        return;
       }
-    };
-    loop();
+    } catch {
+      return;
+    }
+
+    let running = true;
+    let raf = 0;
+    let loop: (() => void) | null = null;
+    let gl: CommonGL | null = null;
+    let mouse: MouseGL | null = null;
+    let sim: FluidSim | null = null;
+    let palette: THREE.DataTexture | null = null;
+    let bayerTex: THREE.DataTexture | null = null;
+    let outputMesh: THREE.Mesh | null = null;
+    let ro: ResizeObserver | null = null;
+    let themeObserver: MutationObserver | null = null;
+
+    try {
+      gl = new CommonGL();
+      const initialized = gl.init(container);
+      if (!initialized || !gl.renderer) return;
+
+      container.prepend(gl.renderer.domElement);
+
+      mouse = new MouseGL();
+      mouse.init(container);
+      mouse.autoIntensity = 2.4;
+
+      const initialMode = getThemeMode();
+      const initialStops =
+        initialMode === "dim" ? dimPalette : initialMode === "dark" ? darkPalette : lightPalette;
+      palette = makePaletteTexture(initialStops);
+      bayerTex = makeBayerTexture();
+
+      const isMobile = window.innerWidth < 768;
+      const effectiveCursorSize = isMobile ? Math.min(cursorSize, 70) : cursorSize;
+      const effectivePixelSize = isMobile ? Math.max(10, Math.min(pixelSize, 12)) : pixelSize;
+      const effectiveResolution = isMobile ? Math.min(resolution, 0.35) : resolution;
+
+      sim = new FluidSim(gl, mouse, {
+        resolution: effectiveResolution,
+        mouse_force: mouseForce,
+        cursor_size: effectiveCursorSize,
+        dt: 0.008,
+        BFECC: false,
+        isBounce: false,
+        isViscous: false,
+        iterations_poisson: isMobile ? 6 : 8,
+      });
+
+      const outputUniforms: Uniforms = {
+        velocity: { value: sim.fbos.vel_0.texture },
+        palette: { value: palette },
+        uBayer: { value: bayerTex },
+        bgColor: { value: getBgColor(initialMode === "dark" || initialMode === "dim") },
+        uTime: { value: 0 },
+        uRes: { value: new THREE.Vector2(gl.width, gl.height) },
+        uPixelSize: { value: effectivePixelSize },
+        boundarySpace: { value: new THREE.Vector2() },
+        px: { value: new THREE.Vector2() },
+      };
+      const outputScene = new THREE.Scene();
+      const outputCam = new THREE.Camera();
+      outputMesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(2, 2),
+        new THREE.RawShaderMaterial({
+          vertexShader: face_vert,
+          fragmentShader: color_frag,
+          transparent: true,
+          depthWrite: false,
+          uniforms: outputUniforms,
+        }),
+      );
+      outputScene.add(outputMesh);
+
+      const updateThemeColors = () => {
+        if (!palette) return;
+        const mode = getThemeMode();
+        const stops = mode === "dim" ? dimPalette : mode === "dark" ? darkPalette : lightPalette;
+        writePaletteData(palette.image.data as Uint8Array, stops);
+        palette.needsUpdate = true;
+        const bg = getBgColor(mode === "dark" || mode === "dim");
+        (outputUniforms.bgColor.value as THREE.Vector4).set(bg.x, bg.y, bg.z, bg.w);
+      };
+
+      themeObserver = new MutationObserver(updateThemeColors);
+      themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class", "data-theme"],
+      });
+
+      let lastInteraction = performance.now();
+      mouse.onInteract = () => {
+        lastInteraction = performance.now();
+      };
+      const driver = autoDemo ? new AutoDriver(mouse, () => lastInteraction, 0.45, 1200) : null;
+
+      const handleResize = () => {
+        if (!gl || !sim) return;
+        gl.resize();
+        sim.resize();
+        (outputUniforms.uRes.value as THREE.Vector2).set(gl.width, gl.height);
+      };
+      ro = new ResizeObserver(handleResize);
+      ro.observe(container);
+
+      loop = () => {
+        if (!running) return;
+        raf = requestAnimationFrame(loop!);
+        try {
+          driver?.update();
+          mouse?.update();
+          gl?.update();
+          if (gl) outputUniforms.uTime.value = gl.time;
+          if (gl && sim) sim.update(gl.time);
+          const r = gl?.renderer;
+          if (r) {
+            r.setRenderTarget(null);
+            r.render(outputScene, outputCam);
+          }
+        } catch {
+          cancelAnimationFrame(raf);
+          running = false;
+        }
+      };
+      loop();
+    } catch (e) {
+      console.warn("Failed to initialize PixelLiquidBg:", e);
+      return;
+    }
 
     const onVisibility = () => {
       if (document.hidden) {
@@ -993,7 +1042,7 @@ export function PixelLiquidBg({
         cancelAnimationFrame(raf);
       } else {
         running = true;
-        loop();
+        loop?.();
       }
     };
     document.addEventListener("visibilitychange", onVisibility);
@@ -1001,18 +1050,22 @@ export function PixelLiquidBg({
     return () => {
       running = false;
       cancelAnimationFrame(raf);
-      ro.disconnect();
-      themeObserver.disconnect();
+      ro?.disconnect();
+      themeObserver?.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
-      mouse.dispose();
-      sim.dispose();
-      palette.dispose();
-      bayerTex.dispose();
-      (outputMesh.material as THREE.Material).dispose();
-      outputMesh.geometry.dispose();
-      const canvas = gl.renderer?.domElement;
-      gl.renderer?.dispose();
-      if (canvas?.parentNode) canvas.parentNode.removeChild(canvas);
+      try {
+        mouse?.dispose();
+        sim?.dispose();
+        palette?.dispose();
+        bayerTex?.dispose();
+        if (outputMesh?.material) (outputMesh.material as THREE.Material).dispose();
+        outputMesh?.geometry.dispose();
+        const canvas = gl?.renderer?.domElement;
+        gl?.renderer?.dispose();
+        if (canvas?.parentNode) canvas.parentNode.removeChild(canvas);
+      } catch {
+        // safe cleanup
+      }
     };
   }, [
     darkPalette,

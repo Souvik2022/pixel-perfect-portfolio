@@ -114,6 +114,14 @@ export function ThemeSwitcher({
           key={option.value}
           className="switcher__option"
           title={`Switch to ${option.value} theme`}
+          onClick={(e) => {
+            e.preventDefault();
+            handleChange(option.value);
+          }}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            handleChange(option.value);
+          }}
         >
           <input
             className="switcher__input"

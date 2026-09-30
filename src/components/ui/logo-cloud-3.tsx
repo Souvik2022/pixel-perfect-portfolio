@@ -60,7 +60,7 @@ export function LogoCloudBlock({
   const displayItems = [...items, ...items, ...items, ...items];
 
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn("w-full min-w-0 max-w-full overflow-hidden", className)}>
       <style>{`
         @keyframes logo-cloud-marquee {
           from { transform: translateX(0); }
@@ -83,7 +83,7 @@ export function LogoCloudBlock({
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">{title}</p>
       )}
 
-      <div className="logo-cloud-mask relative mt-6 w-full overflow-hidden [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+      <div className="logo-cloud-mask relative mt-6 w-full min-w-0 max-w-full overflow-hidden [contain:paint] [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
         <div className="logo-cloud-track flex w-max items-center py-2 sm:py-3 will-change-transform">
           {displayItems.map((item, index) => (
             <div

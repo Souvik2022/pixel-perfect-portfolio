@@ -10,6 +10,7 @@ import { LogoCloudBlock } from "@/components/ui/logo-cloud-3";
 import { PixelLiquidBg } from "@/components/ui/pixel-liquid-bg";
 import { LiquidMetalButton } from "@/components/ui/liquid-metal-button";
 import { useTheme } from "@/components/theme-provider";
+import { ThemeSwitcher } from "@/components/ui/apple-liquid-glass-switcher";
 import { CardContainer, CardBody, CardItem } from "@/components/ui/3d-card";
 
 import afterEffectsIcon from "@/assets/brand-icons/after-effects.svg";
@@ -184,23 +185,19 @@ const PORTFOLIO_DATA = {
 };
 
 function Portfolio() {
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const pageRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
-  const [showMobileNav, setShowMobileNav] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("works");
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      setShowMobileNav(scrollY > 280);
-
       const sections = ["works", "information", "experience", "contact"];
       for (const sectionId of sections) {
         const el = document.getElementById(sectionId);
         if (el) {
           const rect = el.getBoundingClientRect();
-          if (rect.top <= 240 && rect.bottom >= 120) {
+          if (rect.top <= 260 && rect.bottom >= 100) {
             setActiveSection(sectionId);
             break;
           }
@@ -209,6 +206,7 @@ function Portfolio() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -252,45 +250,58 @@ function Portfolio() {
   }, []);
 
   return (
-    <div ref={pageRef} className="min-h-screen bg-paper text-ink overflow-x-hidden">
-      <div ref={loaderRef} className="fixed inset-0 z-50 bg-ink" aria-hidden="true" />
+    <div ref={pageRef} className="min-h-screen bg-paper text-ink">
+      <div
+        ref={loaderRef}
+        className="pointer-events-none fixed inset-0 z-50 bg-ink"
+        aria-hidden="true"
+      />
 
-      <aside className="relative z-10 flex w-full flex-col border-b border-line bg-paper p-5 sm:p-6 md:fixed md:inset-y-0 md:left-0 md:w-72 md:border-b-0 md:border-r md:p-8 md:overflow-y-auto md:scrollbar-none">
-        <div data-reveal className="pr-36 sm:pr-40 md:pr-0">
-          <img
-            src={portrait}
-            alt={`Portrait of ${PORTFOLIO_DATA.name}`}
-            width={512}
-            height={512}
-            loading="eager"
-            className="mb-4 sm:mb-5 size-14 sm:size-16 rounded-lg sm:rounded-md object-cover shadow-xs"
-          />
-          <TextAnimate
-            animation="blurInUp"
-            by="word"
-            as="h1"
-            className="text-lg sm:text-xl font-medium tracking-tight"
-            delay={0.2}
-          >
-            {PORTFOLIO_DATA.name}
-          </TextAnimate>
-          <TextAnimate
-            animation="blurInUp"
-            by="word"
-            as="p"
-            className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-muted"
-            delay={0.3}
-          >
-            {PORTFOLIO_DATA.role}
-          </TextAnimate>
+      <aside className="relative z-10 flex w-full flex-col border-b border-line bg-paper p-4 sm:p-6 md:fixed md:inset-y-0 md:left-0 md:w-72 md:border-b-0 md:border-r md:p-8 md:overflow-y-auto md:scrollbar-none">
+        <div data-reveal className="flex items-center justify-between gap-2.5 md:block">
+          <div className="flex items-center gap-3 sm:gap-3.5 md:block min-w-0">
+            <img
+              src={portrait}
+              alt={`Portrait of ${PORTFOLIO_DATA.name}`}
+              width={512}
+              height={512}
+              loading="eager"
+              className="size-11 sm:size-14 md:size-16 rounded-lg sm:rounded-md object-cover shadow-xs shrink-0 md:mb-5"
+            />
+            <div className="min-w-0">
+              <TextAnimate
+                animation="blurInUp"
+                by="word"
+                as="h1"
+                className="text-base sm:text-lg md:text-xl font-medium tracking-tight truncate"
+                delay={0.2}
+              >
+                {PORTFOLIO_DATA.name}
+              </TextAnimate>
+              <TextAnimate
+                animation="blurInUp"
+                by="word"
+                as="p"
+                className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-muted truncate"
+                delay={0.3}
+              >
+                {PORTFOLIO_DATA.role}
+              </TextAnimate>
+            </div>
+          </div>
+
+          {/* Theme switcher on mobile: scaled cleanly so it stays strictly within bounds */}
+          <div className="md:hidden shrink-0 origin-right scale-[0.74] sm:scale-[0.84]">
+            <ThemeSwitcher value={theme} onValueChange={setTheme} />
+          </div>
         </div>
 
         <nav
-          className="mt-6 sm:mt-8 grid grid-cols-2 gap-x-4 sm:gap-x-5 gap-y-2 sm:gap-y-3 text-[13px] md:mt-12 md:block md:space-y-3"
+          className="hidden md:block md:mt-12 md:space-y-3 text-[13px]"
           aria-label="Primary navigation"
           data-reveal
         >
-          <span className="hidden text-[10px] font-semibold uppercase tracking-[0.2em] text-muted md:block md:mb-5">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted md:block md:mb-5">
             Index
           </span>
           <a
@@ -299,7 +310,7 @@ function Portfolio() {
               e.preventDefault();
               scrollTo("works");
             }}
-            className="group block py-1 sm:py-0 text-ink transition-colors hover:text-vermillion"
+            className="group block text-ink transition-colors hover:text-vermillion"
           >
             <HyperText
               as="span"
@@ -316,7 +327,7 @@ function Portfolio() {
               e.preventDefault();
               scrollTo("information");
             }}
-            className="group block py-1 sm:py-0 text-ink transition-colors hover:text-vermillion"
+            className="group block text-ink transition-colors hover:text-vermillion"
           >
             <HyperText
               as="span"
@@ -333,7 +344,7 @@ function Portfolio() {
               e.preventDefault();
               scrollTo("experience");
             }}
-            className="group block py-1 sm:py-0 text-ink transition-colors hover:text-vermillion"
+            className="group block text-ink transition-colors hover:text-vermillion"
           >
             <HyperText
               as="span"
@@ -350,7 +361,7 @@ function Portfolio() {
               e.preventDefault();
               scrollTo("contact");
             }}
-            className="group block py-1 sm:py-0 text-ink transition-colors hover:text-vermillion"
+            className="group block text-ink transition-colors hover:text-vermillion"
           >
             <HyperText
               as="span"
@@ -364,7 +375,7 @@ function Portfolio() {
         </nav>
 
         <div
-          className="mt-6 sm:mt-8 grid grid-cols-2 gap-3 sm:gap-5 border-t border-line pt-4 sm:pt-5 text-xs md:mt-auto md:block md:space-y-6 md:border-t-0 md:pt-0"
+          className="mt-5 grid grid-cols-2 gap-3 sm:gap-5 border-t border-line pt-4 sm:pt-5 text-xs md:mt-auto md:block md:space-y-6 md:border-t-0 md:pt-0"
           data-reveal
         >
           <div className="space-y-1">
@@ -384,7 +395,7 @@ function Portfolio() {
           </div>
         </div>
 
-        <div className="mt-6 sm:mt-7 md:mt-8 w-full max-w-sm sm:max-w-none" data-reveal>
+        <div className="mt-4 sm:mt-5 md:mt-8 w-full max-w-sm sm:max-w-none" data-reveal>
           <LiquidMetalButton
             label="Inquire"
             fullWidth
@@ -395,51 +406,47 @@ function Portfolio() {
           />
         </div>
 
-        <div className="mt-4 sm:mt-5 flex items-center gap-4 sm:gap-5 text-muted" data-reveal>
+        <div className="mt-3.5 sm:mt-5 flex items-center gap-4 sm:gap-5 text-muted" data-reveal>
           <a
             href={PORTFOLIO_DATA.behance}
             target="_blank"
             rel="noreferrer"
             aria-label="Behance"
-            className="min-h-[40px] flex items-center transition-colors hover:text-vermillion text-xs"
+            className="min-h-[38px] flex items-center transition-colors hover:text-vermillion text-xs font-medium"
           >
-            Be
+            Behance
           </a>
           <a
             href={PORTFOLIO_DATA.linkedin}
             target="_blank"
             rel="noreferrer"
             aria-label="LinkedIn"
-            className="min-h-[40px] flex items-center transition-colors hover:text-vermillion"
+            className="min-h-[38px] flex items-center transition-colors hover:text-vermillion text-xs font-medium"
           >
-            <Linkedin size={15} strokeWidth={1.5} />
+            LinkedIn
           </a>
           <a
             href={PORTFOLIO_DATA.cv}
             target="_blank"
             rel="noreferrer"
-            className="ml-auto min-h-[40px] flex items-center gap-1.5 text-xs transition-colors hover:text-vermillion"
+            className="ml-auto min-h-[38px] flex items-center gap-1.5 text-xs font-medium transition-colors hover:text-vermillion"
             aria-label="Download CV"
           >
-            <Download size={14} strokeWidth={1.5} /> CV
+            <Download size={13} strokeWidth={1.5} /> CV
           </a>
         </div>
       </aside>
 
-      {/* Mobile Floating Quick Navigation Bar */}
-      <motion.nav
-        aria-label="Mobile quick navigation"
-        className="fixed bottom-4 inset-x-3 z-40 mx-auto max-w-sm md:hidden"
-        initial={{ y: 60, opacity: 0 }}
-        animate={{
-          y: showMobileNav ? 0 : 60,
-          opacity: showMobileNav ? 1 : 0,
-          pointerEvents: showMobileNav ? "auto" : "none",
+      {/* Mobile Bottom Navigation Dock - Fixed, responsive, within screen bounds */}
+      <nav
+        aria-label="Mobile navigation dock"
+        className="fixed bottom-3 inset-x-3 z-40 mx-auto flex max-w-sm items-center justify-between rounded-full border border-line/80 bg-paper/92 px-2.5 py-1.5 shadow-xl backdrop-blur-lg md:hidden"
+        style={{
+          paddingBottom: "max(0.375rem, env(safe-area-inset-bottom))",
         }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
       >
-        <div className="flex items-center justify-between gap-1 rounded-full border border-line/80 bg-paper/90 px-2 py-1.5 shadow-xl backdrop-blur-md dark:bg-surface/90">
-          <div className="flex items-center gap-0.5">
+        <div className="flex items-center justify-between w-full">
+          <div className="flex items-center gap-1">
             {[
               { id: "works", label: "Works" },
               { id: "information", label: "Info" },
@@ -452,9 +459,9 @@ function Portfolio() {
                   key={tab.id}
                   onClick={() => scrollTo(tab.id)}
                   className={cn(
-                    "rounded-full px-2.5 sm:px-3 py-1.5 text-xs font-medium transition-all",
+                    "rounded-full px-2.5 sm:px-3 py-1.5 text-xs font-medium transition-all duration-200",
                     isActive
-                      ? "bg-vermillion text-white shadow-xs"
+                      ? "bg-ink text-paper font-semibold shadow-xs"
                       : "text-muted hover:text-ink active:scale-95",
                   )}
                 >
@@ -464,27 +471,19 @@ function Portfolio() {
             })}
           </div>
 
-          <div className="flex items-center gap-1 pl-1 border-l border-line/60">
-            <button
-              onClick={() => {
-                window.location.href = `mailto:${PORTFOLIO_DATA.email}`;
-              }}
-              className="rounded-full bg-ink px-2.5 sm:px-3 py-1.5 text-xs font-medium text-paper transition-all hover:bg-vermillion hover:text-white active:scale-95"
-            >
-              Inquire
-            </button>
-            <button
-              onClick={scrollToTop}
-              aria-label="Scroll to top"
-              className="flex size-7 items-center justify-center rounded-full text-muted transition-colors hover:text-ink active:scale-90"
-            >
-              <ArrowUp size={14} />
-            </button>
-          </div>
-        </div>
-      </motion.nav>
+          <div className="h-4 w-px bg-line/60 mx-1" />
 
-      <main className="md:ml-72 w-full min-w-0 overflow-x-hidden">
+          <button
+            onClick={scrollToTop}
+            aria-label="Scroll to top"
+            className="flex size-7 items-center justify-center rounded-full text-muted transition-colors hover:text-ink active:scale-90"
+          >
+            <ArrowUp size={13} />
+          </button>
+        </div>
+      </nav>
+
+      <main className="min-w-0 md:ml-72 pb-24 md:pb-0 overflow-x-clip">
         <section
           className="relative overflow-hidden border-b border-line px-5 py-12 sm:px-8 sm:py-16 md:px-12 md:pb-20 md:pt-24 lg:px-16 lg:pt-28"
           data-reveal
@@ -796,7 +795,7 @@ function Portfolio() {
                 Selected experience
               </TextAnimate>
             </div>
-            <div className="space-y-10 sm:space-y-14 md:col-span-8">
+            <div className="space-y-10 sm:space-y-14 md:col-span-8 min-w-0">
               {PORTFOLIO_DATA.experience.map((item, index) => (
                 <div key={item.studio}>
                   <div className="grid gap-1.5 sm:flex sm:items-baseline sm:justify-between">
@@ -841,7 +840,7 @@ function Portfolio() {
                   </TextAnimate>
                 </div>
               ))}
-              <div className="border-t border-line pt-8 sm:pt-12">
+              <div className="border-t border-line pt-8 sm:pt-12 min-w-0 overflow-hidden">
                 <LogoCloudBlock title="Selected clients" />
               </div>
             </div>
@@ -850,38 +849,40 @@ function Portfolio() {
 
         <footer
           id="contact"
-          className="scroll-mt-16 md:scroll-mt-8 flex flex-col gap-6 sm:gap-8 border-t border-line px-5 py-8 sm:py-10 pb-24 md:pb-10 text-[10px] uppercase tracking-widest text-muted sm:flex-row sm:items-center sm:justify-between md:px-12 lg:px-16"
+          className="scroll-mt-16 md:scroll-mt-8 flex flex-col gap-6 sm:gap-8 border-t border-line px-5 py-8 sm:py-10 text-[10px] uppercase tracking-widest text-muted md:px-12 lg:px-16"
           data-reveal
         >
-          <div className="flex flex-wrap gap-x-6 sm:gap-x-8 gap-y-2">
-            <span>© 2026 {PORTFOLIO_DATA.name}</span>
-            <span>Available globally</span>
-          </div>
-          <div className="flex flex-wrap items-center gap-5 sm:gap-7 font-medium">
-            <a
-              href={PORTFOLIO_DATA.behance}
-              target="_blank"
-              rel="noreferrer"
-              className="min-h-[40px] flex items-center transition-colors hover:text-vermillion"
-            >
-              Behance
-            </a>
-            <a
-              href={PORTFOLIO_DATA.linkedin}
-              target="_blank"
-              rel="noreferrer"
-              className="min-h-[40px] flex items-center transition-colors hover:text-vermillion"
-            >
-              LinkedIn
-            </a>
-            <a
-              href={PORTFOLIO_DATA.cv}
-              target="_blank"
-              rel="noreferrer"
-              className="min-h-[40px] flex items-center transition-colors hover:text-vermillion"
-            >
-              Download CV
-            </a>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex flex-wrap gap-x-6 sm:gap-x-8 gap-y-2">
+              <span>© 2026 {PORTFOLIO_DATA.name}</span>
+              <span>Available globally</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-5 sm:gap-7 font-medium">
+              <a
+                href={PORTFOLIO_DATA.behance}
+                target="_blank"
+                rel="noreferrer"
+                className="min-h-[40px] flex items-center transition-colors hover:text-vermillion"
+              >
+                Behance
+              </a>
+              <a
+                href={PORTFOLIO_DATA.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="min-h-[40px] flex items-center transition-colors hover:text-vermillion"
+              >
+                LinkedIn
+              </a>
+              <a
+                href={PORTFOLIO_DATA.cv}
+                target="_blank"
+                rel="noreferrer"
+                className="min-h-[40px] flex items-center transition-colors hover:text-vermillion"
+              >
+                Download CV
+              </a>
+            </div>
           </div>
         </footer>
       </main>
