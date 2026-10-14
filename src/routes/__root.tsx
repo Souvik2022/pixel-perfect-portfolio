@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider } from "../components/theme-provider";
 import { TopRightThemeSwitcher } from "../components/top-right-theme-switcher";
+import { Analytics } from "@vercel/analytics/react";
 
 function NotFoundComponent() {
   return (
@@ -143,6 +144,7 @@ function RootComponent() {
         <TopRightThemeSwitcher />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
+        <Analytics />
       </ThemeProvider>
     </QueryClientProvider>
   );
